@@ -12,7 +12,7 @@ SpectrumAnalyzerView.prototype.initialize = function() {
   for (var i = 0; i < 512; i++) { startData.push(1); };
   this._y = d3.scale.linear()
     .domain([0, this.height])
-    .rangeRound([0, this.height]); //rangeRound is used for antialiasing
+    .rangeRound([0, this.height]);
   this._x = d3.scale.linear()
     .domain([0, 1])
     .range([0, this.width]);
