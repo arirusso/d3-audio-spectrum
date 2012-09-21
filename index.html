@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="lib/dsp.js"></script>
+  <script src="lib/d3.v2.js"></script>
+  <script src="src/spectrum_analyzer.js"></script>
+  <script src="src/spectrum_analyzer_view.js"></script>
+  <script src="src/url_audio_source.js"></script>
+  <style>
+    body { background: black; }
+  </style>
+</head>
+
+<body>
+  <div role="main">
+    <div class="charts"></div>
+      <script language="JavaScript">
+
+        var context;
+        var model;
+        var source;
+        var view
+
+        window.onload = function() {
+          context = new webkitAudioContext();
+          source = new UrlAudioSource(context, "media/sweep.mp3", function() {
+            console.log("hi")
+            model = new SpectrumAnalyzer(context, source);
+            view = new SpectrumAnalyzerView(model, ".charts");
+            view.update();
+          });
+        }
+
+      </script>
+    </div>
+  </body>
+</html>
+
