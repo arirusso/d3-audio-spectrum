@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +13,8 @@
 
 <body>
   <div role="main">
-    <div class="charts"></div>
-      <script language="JavaScript">
+    <div id="spectrum_analyzer"></div>
+      <script language="javascript">
 
         var context;
         var model;
@@ -23,17 +22,17 @@
         var view
 
         window.onload = function() {
+
           context = new webkitAudioContext();
           source = new UrlAudioSource(context, "media/sweep.mp3", function() {
-            console.log("hi")
             model = new SpectrumAnalyzer(context, source);
-            view = new SpectrumAnalyzerView(model, ".charts");
+            view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
             view.update();
           });
+
         }
 
       </script>
     </div>
   </body>
 </html>
-
