@@ -23,14 +23,11 @@ SpectrumAnalyzer.prototype.initializeRouting = function() {
 
 SpectrumAnalyzer.prototype.initializeFFT = function() {
   this.data = new Array();
-		
   var frameBufferSize = 4096;
-	var bufferSize = frameBufferSize/4;
-		
-	this.mono = new Float32Array(bufferSize);
-	this.delta = new Float32Array(bufferSize);
-		
-	this.fft = new FFT(bufferSize, 44100);
+  var bufferSize = frameBufferSize/4;
+  this.mono = new Float32Array(bufferSize);
+  this.delta = new Float32Array(bufferSize);	
+  this.fft = new FFT(bufferSize, 44100);
 }
 
 SpectrumAnalyzer.prototype.routeAudio = function(event) {
