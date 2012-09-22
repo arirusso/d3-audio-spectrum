@@ -1,7 +1,7 @@
 function SpectrumAnalyzerView(model, selector) {
   this.model = model;
   this.selector = selector;
-  this.width = 3;
+  this.width = 2;
   this.height = 500;
   this.initialize();
 }
@@ -13,6 +13,12 @@ SpectrumAnalyzerView.prototype.initialize = function() {
   this._x = d3.scale.linear()
     .domain([0, 1])
     .range([0, this.width]);
+  this.color = d3.scale.linear()
+    .domain([0, 500])
+    .range(["blue", "red"]);
+  this.amplitude = d3.scale.linear()
+    .domain([0,10])
+    .range([0,500]);
   this.initializeChart();
 }
 
@@ -45,17 +51,14 @@ SpectrumAnalyzerView.prototype.initializeChart = function() {
 
 SpectrumAnalyzerView.prototype.update = function() {
   var view = this;
-  var color = 'rgb(' + Math.floor(255 * Math.random()) +
-    ', ' + Math.floor(255 * Math.random()) +
-    ', ' + Math.floor(255 * Math.random()) + ')';
 
   this.chart.selectAll("rect")
     .data(this.model.data)
-    .attr("fill", color)
+    .attr("fill", function(d) { return view.color(d); })
     .attr("x", function(d, i) { return view._x(i) - .5; })
     .attr("y", function(d) { return view.height - view._y(d) - .5; })
     .attr("width", this.width)
-    .attr("height", function(d) { return view._y(d); } );
+    .attr("height", function(d) { return view.amplitude(d); } );
 
   this.enqueueNextUpdate()
 }

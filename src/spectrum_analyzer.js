@@ -5,6 +5,11 @@ function SpectrumAnalyzer(context, source) {
 }
 
 SpectrumAnalyzer.prototype.initialize = function() {
+  this.initializeRouting();  
+  this.initializeFFT();
+}
+
+SpectrumAnalyzer.prototype.initializeRouting = function() {
   var spectrumAnalyzer = this;
 
   this.analysis = this.context.createJavaScriptNode(1024);
@@ -14,8 +19,6 @@ SpectrumAnalyzer.prototype.initialize = function() {
 
   this.source.connect(this.analysis);
   this.analysis.connect(this.context.destination);
-  
-  this.initializeFFT();
 }
 
 SpectrumAnalyzer.prototype.initializeFFT = function() {
@@ -25,7 +28,7 @@ SpectrumAnalyzer.prototype.initializeFFT = function() {
 	var bufferSize = frameBufferSize/4;
 		
 	this.mono = new Float32Array(bufferSize);
-	this.peak = new Float32Array(bufferSize);
+	this.delta = new Float32Array(bufferSize);
 		
 	this.fft = new FFT(bufferSize, 44100);
 }
@@ -53,7 +56,8 @@ SpectrumAnalyzer.prototype.audioReceived = function(event) {
   this.routeAudio(event);   
   this.fft.forward(this.mono);
   for ( var i = 0; i < this.fft.spectrum.length; i++ ) {
-    magnitude = Math.floor(this.fft.spectrum[i] * 400);
-    this.data[i] = magnitude;
+    amplitude = this.fft.spectrum[i] * 1000;
+    this.delta[i] = amplitude - this.data[i];
+    this.data[i] = amplitude;
   }
 }
