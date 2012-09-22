@@ -43,10 +43,8 @@ SpectrumAnalyzer.prototype.routeAudio = function(event) {
     r: event.outputBuffer.getChannelData(1)
   };
 			
-  var n = this.mono.length;
-
-	for (var i = 0; i < n; ++i) {
-	  output.l[i] = input.l[i];
+  for (var i = 0; i < this.mono.length; ++i) {
+    output.l[i] = input.l[i];
     output.r[i] = input.r[i];
     this.mono[i] = (input.l[i] + input.r[i]) / 2;
   }
