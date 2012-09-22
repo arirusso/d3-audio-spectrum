@@ -1,27 +1,40 @@
 function SpectrumAnalyzerView(model, selector) {
   this.model = model;
   this.selector = selector;
-  this.width = 2;
+  this.width = 3;
   this.height = 500;
   this.initialize();
 }
 
 SpectrumAnalyzerView.prototype.initialize = function() {
-  var view = this;
-  var startData = []
-  for (var i = 0; i < 512; i++) { startData.push(1); };
   this._y = d3.scale.linear()
     .domain([0, this.height])
     .rangeRound([0, this.height]);
   this._x = d3.scale.linear()
     .domain([0, 1])
     .range([0, this.width]);
+  this.initializeChart();
+}
+
+SpectrumAnalyzerView.prototype.getInitialData = function() {
+  var data = [];
+  for (var i = 0; i < 512; i++) { 
+    data.push(1); 
+  };
+  return data;
+}
+
+SpectrumAnalyzerView.prototype.initializeChart = function() {
+  var view = this;
+  var data = this.getInitialData();
+
   this.chart = d3.select(this.selector).append("svg")
     .attr("class", "chart")
-    .attr("width", this.width * startData.length)
+    .attr("width", this.width * data.length)
     .attr("height", this.height);
+
   this.chart.selectAll("rect")
-    .data(startData)
+    .data(data)
     .enter().append("rect")
     .attr("fill", "#FFF")
     .attr("x", function(d, i) { return view._x(i) - .5; })
@@ -44,10 +57,10 @@ SpectrumAnalyzerView.prototype.update = function() {
     .attr("width", this.width)
     .attr("height", function(d) { return view._y(d); } );
 
-  this.queueNextUpdate()
+  this.enqueueNextUpdate()
 }
 
-SpectrumAnalyzerView.prototype.queueNextUpdate = function() {
+SpectrumAnalyzerView.prototype.enqueueNextUpdate = function() {
   var view = this;
   timeout = setTimeout(function() { view.update() }, 50);
   return timeout;
