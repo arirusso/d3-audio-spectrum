@@ -1,6 +1,7 @@
-function SpectrumAnalyzer(context, source) {
+function SpectrumAnalyzer(context, source, sampleRate) {
   this.context = context;
   this.source = source;
+  this.sampleRate = sampleRate || 44100;
   this.initialize();
 }
 
@@ -26,7 +27,7 @@ SpectrumAnalyzer.prototype.initializeFFT = function() {
   var bufferSize = 256;
   this.mono = new Float32Array(bufferSize);
   this.delta = new Float32Array(bufferSize);	
-  this.fft = new FFT(bufferSize, 44100);
+  this.fft = new FFT(bufferSize, this.sampleRate);
 }
 
 SpectrumAnalyzer.prototype.routeAudio = function(event) {
