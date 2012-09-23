@@ -13,6 +13,11 @@ Audio.prototype.initialize = function() {
   this.mono = new Float32Array(this.bufferSize/8);
 }
 
+Audio.prototype.addProcessor = function(processor) {
+  this.gain.connect(processor);
+  processor.connect(this.context.destination);
+}
+
 Audio.prototype.setVolume = function(element) {
   var fraction=parseInt(element.value)/parseInt(element.max);
   this.gain.gain.value=fraction*fraction;
