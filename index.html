@@ -28,7 +28,7 @@
         window.onload = function() {
 
           context = new webkitAudioContext();
-          source = new UrlAudioSource(context, "media/3.mp3", function() {
+          source = new UrlAudioSource(context, "media/sweep.mp3", function() {
             model = new SpectrumAnalyzer(context, source);
             view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
             view.update();
