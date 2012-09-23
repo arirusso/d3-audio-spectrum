@@ -15,9 +15,8 @@ SpectrumAnalyzer.prototype.initialize = function() {
   this.analysis.connect(this.audio.context.destination);
 
   this.data = new Array();
-  this.bufferSize = 2048;
-  this.delta = new Float32Array(this.bufferSize/8);	
-  this.fft = new FFT(this.bufferSize/8, this.sampleRate);
+  this.delta = new Float32Array(this.audio.bufferSize/8);	
+  this.fft = new FFT(this.audio.bufferSize/8, this.sampleRate);
 }
 
 SpectrumAnalyzer.prototype.audioReceived = function(event) {
