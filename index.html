@@ -3,6 +3,7 @@
 <head>
   <script src="lib/dsp.js"></script>
   <script src="lib/d3.v2.js"></script>
+  <script src="src/audio.js"></script>
   <script src="src/spectrum_analyzer.js"></script>
   <script src="src/spectrum_analyzer_view.js"></script>
   <script src="src/url_audio_source.js"></script>
@@ -18,8 +19,8 @@
     <h1>Spectrum Analyzer Demo</h1>
     <h4>Using <a href="http://d3js.org">d3.js</a>, HTML5 Web Audio API and <a href="https://github.com/corbanbrook/dsp.js">dsp.js</a>.</h3>
     <div id="spectrum_analyzer"></div>
-    <p><input type="button" onclick="model.toggle();" value="Play/Pause">
-      Volume: <input type="range" min="0" max="100" value="100" onchange="model.setVolume(this);"></p>
+    <p><input type="button" onclick="audio.toggle();" value="Play/Pause">
+      Volume: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum">on github</a>)</h2>
      <script language="javascript">
 
@@ -32,7 +33,8 @@
 
           context = new webkitAudioContext();
           source = new UrlAudioSource(context, "media/sweep.mp3", function() {
-            model = new SpectrumAnalyzer(context, source);
+            audio = new Audio(context, source);
+            model = new SpectrumAnalyzer(audio);
             view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
             view.update();
           });
