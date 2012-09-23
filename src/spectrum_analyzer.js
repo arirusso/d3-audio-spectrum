@@ -2,12 +2,14 @@ function SpectrumAnalyzer(context, source, sampleRate) {
   this.context = context;
   this.source = source;
   this.sampleRate = sampleRate || 44100;
+  this.playing = true;
   this.initialize();
 }
 
 SpectrumAnalyzer.prototype.initialize = function() {
-  this.initializeRouting();  
+  this.initializeRouting();
   this.initializeFFT();
+  this.play();
 }
 
 SpectrumAnalyzer.prototype.initializeRouting = function() {
@@ -18,9 +20,35 @@ SpectrumAnalyzer.prototype.initializeRouting = function() {
     spectrumAnalyzer.audioReceived(event); 
   };
 
-  this.source.connect(this.analysis);
+  this.gain = context.createGainNode();
+  this.source.connect(this.gain);
+  this.gain.connect(this.analysis);
   this.analysis.connect(this.context.destination);
 }
+
+SpectrumAnalyzer.prototype.setVolume = function(element) {
+  var fraction=parseInt(element.value)/parseInt(element.max);
+  this.gain.gain.value=fraction*fraction;
+}
+
+SpectrumAnalyzer.prototype.stop = function() { 
+  this.source.source.noteOff(0);
+  this.playing = false;
+};
+
+SpectrumAnalyzer.prototype.play = function() {
+  var source = this.source;
+  var spectrumAnalyzer = this;
+  this.source.load(function() {
+    source.source.loop = true;
+    source.source.noteOn(0);
+    spectrumAnalyzer.playing = true;
+  });
+}
+
+SpectrumAnalyzer.prototype.toggle = function() {
+  this.playing ? this.stop() : this.play(); 
+};
 
 SpectrumAnalyzer.prototype.initializeFFT = function() {
   this.data = new Array();
