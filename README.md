@@ -2,7 +2,7 @@
 
 This is a spectrum analyzer demo using the HTML5 Web Audio API, [dsp.js](https://github.com/corbanbrook/dsp.js) and [d3.js](http://d3js.org).
 
-![image](![https://lh6.googleusercontent.com/-dIWr7F3fas4/UF9lp6P39xI/AAAAAAAAAOk/o72f__WUSZo/s800/screenshot.png])
+![image](![http://i.imgur.com/cmdOr.png])
 
 A frequency sweep mp3 is included for demo purposes but any audio file can be used.
 
