@@ -1,7 +1,7 @@
 function SpectrumAnalyzerView(model, selector) {
   this.model = model;
   this.selector = selector;
-  this.width = 2;
+  this.width = 8;
   this.height = 500;
   this.initialize();
 }
@@ -24,7 +24,7 @@ SpectrumAnalyzerView.prototype.initialize = function() {
 
 SpectrumAnalyzerView.prototype.getInitialData = function() {
   var data = [];
-  for (var i = 0; i < 512; i++) { 
+  for (var i = 0; i < 128; i++) { 
     data.push(1); 
   };
   return data;
