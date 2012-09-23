@@ -7,13 +7,17 @@
   <script src="src/spectrum_analyzer_view.js"></script>
   <script src="src/url_audio_source.js"></script>
   <style>
-    body { background: black; text-align:center; } 
+    body { background: #111; padding:2em; }
+    h1, h2, a { color: #ddd; }
+    #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; }
   </style>
 </head>
 
 <body>
   <div role="main">
+    <h1>Spectrum Analyzer Demo</h1>
     <div id="spectrum_analyzer"></div>
+    <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum">source</a>)</h2>
       <script language="javascript">
 
         var context;
@@ -24,7 +28,7 @@
         window.onload = function() {
 
           context = new webkitAudioContext();
-          source = new UrlAudioSource(context, "media/sweep.mp3", function() {
+          source = new UrlAudioSource(context, "media/3.mp3", function() {
             model = new SpectrumAnalyzer(context, source);
             view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
             view.update();
