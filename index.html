@@ -7,8 +7,8 @@
   <script src="src/spectrum_analyzer_view.js"></script>
   <script src="src/url_audio_source.js"></script>
   <style>
-    body { background: #111; padding:2em; }
-    h1, h2, h3, h4, a { color: #ddd; }
+    body { background: #111; padding:0 2em 2em 2em; }
+    h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
     #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; }
   </style>
 </head>
@@ -18,8 +18,10 @@
     <h1>Spectrum Analyzer Demo</h1>
     <h4>Using <a href="http://d3js.org">d3.js</a>, HTML5 Web Audio API and <a href="https://github.com/corbanbrook/dsp.js">dsp.js</a>.</h3>
     <div id="spectrum_analyzer"></div>
+    <p><input type="button" onclick="model.toggle();" value="Play/Pause">
+      Volume: <input type="range" min="0" max="100" value="100" onchange="model.setVolume(this);"></p>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum">on github</a>)</h2>
-      <script language="javascript">
+     <script language="javascript">
 
         var context;
         var model;
