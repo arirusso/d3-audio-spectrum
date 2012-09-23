@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     rack (1.4.1)
 
