@@ -11,8 +11,7 @@ SpectrumAnalyzer.prototype.initialize = function() {
     spectrumAnalyzer.audioReceived(event); 
   };
 
-  this.audio.gain.connect(this.analysis);
-  this.analysis.connect(this.audio.context.destination);
+  this.audio.addProcessor(this.analysis);
 
   this.data = new Array();
   this.delta = new Float32Array(this.audio.bufferSize/8);	

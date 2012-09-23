@@ -13,6 +13,11 @@ Audio.prototype.initialize = function() {
   this.mono = new Float32Array(this.bufferSize/8);
 }
 
+Audio.prototype.addProcessor = function(processor) {
+  this.gain.connect(processor);
+  processor.connect(this.context.destination);
+}
+
 Audio.prototype.setVolume = function(element) {
   var fraction=parseInt(element.value)/parseInt(element.max);
   this.gain.gain.value=fraction*fraction;
@@ -26,10 +31,12 @@ Audio.prototype.stop = function() {
 Audio.prototype.play = function() {
   var source = this.source;
   var audio = this;
+  document.getElementById("loader").style.display = 'block';
   this.source.load(function() {
     source.source.loop = true;
     source.source.noteOn(0);
     audio.playing = true;
+    document.getElementById("loader").style.display = 'none';
   });
 }
 
