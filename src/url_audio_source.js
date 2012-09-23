@@ -18,7 +18,10 @@ UrlAudioSource.prototype.load = function() {
 }
 
 UrlAudioSource.prototype.afterLoad = function(response) {
-  this.source.buffer = this.context.createBuffer(response, false);
+  var source = this;
+  this.context.decodeAudioData(response, function(buffer) {
+      source.source.buffer = buffer;
+    }, function() { });
   this.source.looping = true;
   this.source.noteOn(0);
   this.callback();
