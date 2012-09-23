@@ -31,10 +31,12 @@ Audio.prototype.stop = function() {
 Audio.prototype.play = function() {
   var source = this.source;
   var audio = this;
+  document.getElementById("loader").style.display = 'block';
   this.source.load(function() {
     source.source.loop = true;
     source.source.noteOn(0);
     audio.playing = true;
+    document.getElementById("loader").style.display = 'none';
   });
 }
 

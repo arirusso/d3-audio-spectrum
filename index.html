@@ -18,7 +18,9 @@
   <div role="main">
     <h1>Spectrum Analyzer Demo</h1>
     <h4>Using <a href="http://d3js.org">d3.js</a>, HTML5 Web Audio API and <a href="https://github.com/corbanbrook/dsp.js">dsp.js</a>.</h3>
-    <div id="spectrum_analyzer"></div>
+    <div id="spectrum_analyzer">
+      <img id="loader" src="images/loader.gif" style="display:none;"/>
+    </div>
     <p><input type="button" onclick="audio.toggle();" value="Play/Pause">
       Volume: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum">on github</a>)</h2>
