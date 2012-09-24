@@ -3,17 +3,16 @@ function Audio(context, source, sampleRate) {
   this.source = source;
   this.sampleRate = sampleRate || 44100;
   this.playing = false;
-  this.initialize();
+  this.bufferSize = 2048;
 }
 
-Audio.prototype.initialize = function() {
+Audio.prototype.connect = function() {
   this.gain = context.createGainNode();
   this.source.connect(this.gain);
-  this.bufferSize = 2048;
   this.mono = new Float32Array(this.bufferSize/8);
 }
 
-Audio.prototype.addProcessor = function(processor) {
+Audio.prototype.connectProcessor = function(processor) {
   this.gain.connect(processor);
   processor.connect(this.context.destination);
 }

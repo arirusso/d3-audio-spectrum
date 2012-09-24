@@ -1,21 +1,21 @@
 function SpectrumAnalyzer(audio) {
   this.audio = audio;
-  this.initialize();
-}
-
-SpectrumAnalyzer.prototype.initialize = function() {
-  var spectrumAnalyzer = this;
-
-  this.analysis = this.audio.context.createJavaScriptNode(1024);
-  this.analysis.onaudioprocess = function(event) { 
-    spectrumAnalyzer.audioReceived(event); 
-  };
-
-  this.audio.addProcessor(this.analysis);
-
   this.data = new Array();
   this.delta = new Float32Array(this.audio.bufferSize/8);	
   this.fft = new FFT(this.audio.bufferSize/8, this.sampleRate);
+  this.connect();
+}
+
+SpectrumAnalyzer.prototype.connect = function() {
+  var analyzer = this;
+
+  this.analysis = this.audio.context.createJavaScriptNode(1024);
+  this.analysis.onaudioprocess = function(event) { 
+    analyzer.audioReceived(event); 
+  };
+
+  this.audio.connect();
+  this.audio.connectProcessor(this.analysis);
 }
 
 SpectrumAnalyzer.prototype.audioReceived = function(event) {

@@ -19,9 +19,9 @@ UrlAudioSource.prototype.load = function(callback) {
 UrlAudioSource.prototype.afterLoad = function(response, callback) {
   var source = this;
   this.context.decodeAudioData(response, function(buffer) {
-      source.source.buffer = buffer;
-      callback();
-    }, function() { });
+    source.source.buffer = buffer;
+    callback();
+  }, function() { });
 }
 
 UrlAudioSource.prototype.connect = function(connector) {
