@@ -12,6 +12,7 @@
     h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
     #loader { padding: 3em; }
     #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; }
+    #loading { padding: 1em; }
   </style>
 </head>
 
@@ -19,11 +20,17 @@
   <div role="main">
     <h1>Spectrum Analyzer Demo</h1>
     <h4>Using <a href="http://d3js.org">d3.js</a>, HTML5 Web Audio API and <a href="https://github.com/corbanbrook/dsp.js">dsp.js</a>.</h3>
-    <div id="spectrum_analyzer">
+    <div id="loading">
+      <img id="progress" src="images/loader.gif"/>
+      <p>Loading audio file, please wait...</p>
+    </div>
+    <div id="spectrum_analyzer" style="display:none;">
       <img id="loader" src="images/loader.gif" style="display:none;"/>
     </div>
-    <p><input type="button" onclick="audio.toggle();" value="Play/Pause">
+    <div id="controls" style="display:none;">
+      <p><input id="play" type="button" onclick="audio.toggle();" value="Play/Pause">
       Gain: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
+    </div>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum" target="_blank">on github</a>)</h2>
      <script language="javascript">
 
@@ -37,6 +44,9 @@
 
           context = new webkitAudioContext();
           source = new UrlAudioSource(context, "media/04182011.mp3", function() {
+            document.getElementById("loading").style.display = 'none';
+            document.getElementById("spectrum_analyzer").style.display = 'block';
+            document.getElementById("controls").style.display = 'inline';
             audio = new Audio(context, source);
             model = new SpectrumAnalyzer(audio);
             view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
