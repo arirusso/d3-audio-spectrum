@@ -23,15 +23,15 @@
       <img id="loader" src="images/loader.gif" style="display:none;"/>
     </div>
     <p><input type="button" onclick="audio.toggle();" value="Play/Pause">
-      Volume: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
-    <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum">on github</a>)</h2>
+      Gain: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
+    <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum" target="_blank">on github</a>)</h2>
      <script language="javascript">
 
         var audio;
         var context;
         var model;
         var source;
-        var view
+        var view;
 
         window.onload = function() {
 
