@@ -1,5 +1,5 @@
-function Audio(context, source, sampleRate) {
-  this.context = context;
+function Audio(source, sampleRate) {
+  this.context = source.context;
   this.source = source;
   this.sampleRate = sampleRate || 44100;
   this.playing = false;
@@ -7,7 +7,7 @@ function Audio(context, source, sampleRate) {
 }
 
 Audio.prototype.connect = function() {
-  this.gain = context.createGainNode();
+  this.gain = this.context.createGainNode();
   this.source.connect(this.gain);
   this.mono = new Float32Array(this.bufferSize/8);
 }
@@ -27,21 +27,19 @@ Audio.prototype.stop = function() {
   this.playing = false;
 };
 
-Audio.prototype.play = function() {
+Audio.prototype.play = function(callback) {
   var source = this.source;
   var audio = this;
   document.getElementById("loader").style.display = 'block';
   this.source.load(function() {
+    audio.connect();
     source.source.loop = true;
     source.source.noteOn(0);
     audio.playing = true;
     document.getElementById("loader").style.display = 'none';
+    callback();
   });
 }
-
-Audio.prototype.toggle = function() {
-  this.playing ? this.stop() : this.play(); 
-};
 
 Audio.prototype.routeAudio = function(event) {
   var input = {
