@@ -1,7 +1,6 @@
-function UrlAudioSource(context, url, callback) {
-  this.context = context;
+function UrlAudioSource(url, callback) {
+  this.context = new webkitAudioContext();
   this.url = url;
-  this.source = this.context.createBufferSource();
   this.load(callback);
 }
 
@@ -11,13 +10,14 @@ UrlAudioSource.prototype.load = function(callback) {
   request.open("GET", this.url, true);
   request.responseType = "arraybuffer";
   request.onload = function() { 
-    source.afterLoad(request.response, callback);
+    source.decode(request.response, callback);
   }
   request.send();
 }
 
-UrlAudioSource.prototype.afterLoad = function(response, callback) {
+UrlAudioSource.prototype.decode = function(response, callback) {
   var source = this;
+  this.source = this.context.createBufferSource();
   this.context.decodeAudioData(response, function(buffer) {
     source.source.buffer = buffer;
     callback();

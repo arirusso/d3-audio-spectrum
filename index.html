@@ -28,26 +28,24 @@
       <img id="loader" src="images/loader.gif" style="display:none;"/>
     </div>
     <div id="controls" style="display:none;">
-      <p><input id="play" type="button" onclick="audio.toggle();" value="Play/Pause">
+      <p><input id="play" type="button" onclick="model.toggle();" value="Play/Pause">
       Gain: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
     </div>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum" target="_blank">on github</a>)</h2>
      <script language="javascript">
 
         var audio;
-        var context;
         var model;
         var source;
         var view;
 
         window.onload = function() {
 
-          context = new webkitAudioContext();
-          source = new UrlAudioSource(context, "media/sweep.mp3", function() {
+          source = new UrlAudioSource("media/sweep.mp3", function() {
             document.getElementById("loading").style.display = 'none';
             document.getElementById("spectrum_analyzer").style.display = 'block';
             document.getElementById("controls").style.display = 'inline';
-            audio = new Audio(context, source);
+            audio = new Audio(source);
             model = new SpectrumAnalyzer(audio);
             view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
             view.update();
