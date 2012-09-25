@@ -3,10 +3,10 @@
 <head>
   <script src="lib/dsp.js"></script>
   <script src="lib/d3.v2.js"></script>
-  <script src="src/audio.js"></script>
-  <script src="src/spectrum_analyzer.js"></script>
-  <script src="src/spectrum_analyzer_view.js"></script>
-  <script src="src/url_audio_source.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/spectrum_analyzer.js"></script>
+  <script src="js/spectrum_analyzer_view.js"></script>
+  <script src="js/url_audio_source.js"></script>
   <style>
     body { background: #111; padding:0 2em 2em 2em; }
     h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
@@ -35,13 +35,15 @@
      <script language="javascript">
 
         var audio;
+        var context;
         var model;
         var source;
         var view;
 
         window.onload = function() {
 
-          source = new UrlAudioSource("media/sweep.mp3", function() {
+          context = new webkitAudioContext();
+          source = new UrlAudioSource(context, "media/sweep.mp3", function() {
             document.getElementById("loading").style.display = 'none';
             document.getElementById("spectrum_analyzer").style.display = 'block';
             document.getElementById("controls").style.display = 'inline';
