@@ -31,7 +31,7 @@ Application.prototype.setVolume = function(element) {
 }
 
 Application.prototype.setResolution = function(element) {
-  this.model.setResolution(element.value);  
+  this.model.setResolution(48/element.value);  
   this.view.reset();
 }
 
