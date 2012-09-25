@@ -42,7 +42,14 @@
 
         window.onload = function() {
 
-          context = new webkitAudioContext();
+          if (! window.AudioContext) {
+		        if (! window.webkitAudioContext) {
+              alert("Sorry, your browser is not supported.");
+              return;
+		        }
+		        window.AudioContext = window.webkitAudioContext;
+	        }
+          context = new AudioContext();
           source = new UrlAudioSource(context, "media/sweep.mp3", function() {
             document.getElementById("loading").style.display = 'none';
             document.getElementById("spectrum_analyzer").style.display = 'block';
