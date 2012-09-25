@@ -1,5 +1,5 @@
-function UrlAudioSource(url, callback) {
-  this.context = new webkitAudioContext();
+function UrlAudioSource(context, url, callback) {
+  this.context = context 
   this.url = url;
   this.load(callback);
 }
