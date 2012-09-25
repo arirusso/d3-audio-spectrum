@@ -17,11 +17,6 @@ SpectrumAnalyzer.prototype.play = function() {
   });
 }
 
-SpectrumAnalyzer.prototype.toggle = function() {
-  this.audio.playing ? this.audio.stop() : this.play(); 
-};
-
-
 SpectrumAnalyzer.prototype.audioReceived = function(event) {
   this.audio.routeAudio(event);   
   this.fft.forward(this.audio.mono);

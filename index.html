@@ -3,16 +3,19 @@
 <head>
   <script src="lib/dsp.js"></script>
   <script src="lib/d3.v2.js"></script>
+  <script src="js/application.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/spectrum_analyzer.js"></script>
   <script src="js/spectrum_analyzer_view.js"></script>
   <script src="js/url_audio_source.js"></script>
+  <script language="javascript">window.onload = Application.load();</script>
   <style>
     body { background: #111; padding:0 2em 2em 2em; }
     h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
-    #loader { padding: 3em; }
-    #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; }
+    #loader { padding: 3em; display:none; }
+    #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; display:none; }
     #loading { padding: 1em; }
+    #controls { display:none; }
   </style>
 </head>
 
@@ -24,45 +27,14 @@
       <img id="progress" src="images/loader.gif"/>
       <p>Loading audio file, please wait...</p>
     </div>
-    <div id="spectrum_analyzer" style="display:none;">
-      <img id="loader" src="images/loader.gif" style="display:none;"/>
+    <div id="spectrum_analyzer">
+      <img id="loader" src="images/loader.gif" />
     </div>
-    <div id="controls" style="display:none;">
-      <p><input id="play" type="button" onclick="model.toggle();" value="Play/Pause">
-      Gain: <input type="range" min="0" max="100" value="100" onchange="audio.setVolume(this);"></p>
+    <div id="controls">
+      <p><input id="play" type="button" onclick="Application.togglePlay();" value="Play/Pause">
+      Gain: <input type="range" min="0" max="100" value="100" onchange="Application.setVolume(this);"></p>
     </div>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum" target="_blank">on github</a>)</h2>
-     <script language="javascript">
-
-        var audio;
-        var context;
-        var model;
-        var source;
-        var view;
-
-        window.onload = function() {
-
-          if (! window.AudioContext) {
-		        if (! window.webkitAudioContext) {
-              alert("Sorry, your browser is not supported.");
-              return;
-		        }
-		        window.AudioContext = window.webkitAudioContext;
-	        }
-          context = new AudioContext();
-          source = new UrlAudioSource(context, "media/sweep.mp3", function() {
-            document.getElementById("loading").style.display = 'none';
-            document.getElementById("spectrum_analyzer").style.display = 'block';
-            document.getElementById("controls").style.display = 'inline';
-            audio = new Audio(source);
-            model = new SpectrumAnalyzer(audio);
-            view = new SpectrumAnalyzerView(model, "#spectrum_analyzer");
-            view.update();
-          });
-
-        }
-
-      </script>
-    </div>
-  </body>
+  </div>
+</body>
 </html>

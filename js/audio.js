@@ -17,15 +17,15 @@ Audio.prototype.connectProcessor = function(processor) {
   processor.connect(this.context.destination);
 }
 
-Audio.prototype.setVolume = function(element) {
-  var fraction=parseInt(element.value)/parseInt(element.max);
-  this.gain.gain.value=fraction*fraction;
+Audio.prototype.setVolume = function(value, max) {
+  var fraction = parseInt(value) / parseInt(max);
+  this.gain.gain.value = fraction * fraction;
 }
 
 Audio.prototype.stop = function() { 
   this.source.source.noteOff(0);
   this.playing = false;
-};
+}
 
 Audio.prototype.play = function(callback) {
   var source = this.source;
