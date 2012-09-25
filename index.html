@@ -31,8 +31,11 @@
       <img id="loader" src="images/loader.gif" />
     </div>
     <div id="controls">
-      <p><input id="play" type="button" onclick="Application.togglePlay();" value="Play/Pause">
-      Gain: <input type="range" min="0" max="100" value="100" onchange="Application.setVolume(this);"></p>
+      <p>
+        <input id="play" type="button" onclick="Application.togglePlay();" value="Play/Pause">
+        Gain: <input type="range" min="0" max="100" value="100" onchange="Application.setVolume(this);">
+        Resolution: <input type="range" min="1" max="48" value="1" onchange="Application.setResolution(this);">
+      </p>
     </div>
     <h2>(<a href="https://github.com/arirusso/d3-audio-spectrum" target="_blank">on github</a>)</h2>
   </div>

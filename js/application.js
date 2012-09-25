@@ -25,7 +25,14 @@ Application.prototype.play = function() {
 }
 
 Application.prototype.setVolume = function(element) {
-  this.audio.setVolume(element.value, element.max);  
+  var fraction = parseInt(element.value) / parseInt(element.max);
+  var value = fraction * fraction;
+  this.audio.setVolume(value);  
+}
+
+Application.prototype.setResolution = function(element) {
+  this.model.setResolution(element.value);  
+  this.view.reset();
 }
 
 Application.prototype.togglePlay = function() {
@@ -60,6 +67,10 @@ Application.play = function() {
 
 Application.setVolume = function(element) {
   this.instance.setVolume(element);  
+}
+
+Application.setResolution = function(element) {
+  this.instance.setResolution(element);  
 }
 
 Application.togglePlay = function() {

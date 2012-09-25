@@ -9,7 +9,6 @@ function Audio(source, sampleRate) {
 Audio.prototype.connect = function() {
   this.gain = this.context.createGainNode();
   this.source.connect(this.gain);
-  this.mono = new Float32Array(this.bufferSize/8);
 }
 
 Audio.prototype.connectProcessor = function(processor) {
@@ -17,9 +16,8 @@ Audio.prototype.connectProcessor = function(processor) {
   processor.connect(this.context.destination);
 }
 
-Audio.prototype.setVolume = function(value, max) {
-  var fraction = parseInt(value) / parseInt(max);
-  this.gain.gain.value = fraction * fraction;
+Audio.prototype.setVolume = function(value) {
+  this.gain.gain.value = value;
 }
 
 Audio.prototype.stop = function() { 
