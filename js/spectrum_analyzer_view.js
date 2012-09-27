@@ -26,7 +26,9 @@ SpectrumAnalyzerView.prototype._x = function(n) {
 }
 
 SpectrumAnalyzerView.prototype.barWidth = function() {
-  return 4096/this.model.resolution;
+  var bands = this.model.data.length || 512
+  var curveFactor = ((1024 / bands) - 2)
+  return (4096/this.model.resolution) + curveFactor;
 }
 
 SpectrumAnalyzerView.prototype.createChart = function() {
@@ -55,7 +57,7 @@ SpectrumAnalyzerView.prototype.initializeChart = function() {
     .attr("x", function(d, i) { return view._x(i) - .5; })
     .attr("y", function(d) { return view.height - view._y(d) - .5; })
     .attr("width", this.barWidth())
-    .attr("height", function(d) { return view._y(d); } );
+    .attr("height", function(d) { return 0; } );
 }
 
 SpectrumAnalyzerView.prototype.update = function() {

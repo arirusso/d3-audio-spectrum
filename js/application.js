@@ -35,6 +35,11 @@ Application.prototype.setResolution = function(element) {
   this.view.reset();
 }
 
+Application.prototype.setCurve = function(element) {
+  this.model.setCurve(element.value);  
+  this.view.reset();
+}
+
 Application.prototype.togglePlay = function() {
   this.audio.playing ? this.audio.stop() : this.play(); 
 }
@@ -71,6 +76,10 @@ Application.setVolume = function(element) {
 
 Application.setResolution = function(element) {
   this.instance.setResolution(element);  
+}
+
+Application.setCurve = function(element) {
+  this.instance.setCurve(element);  
 }
 
 Application.togglePlay = function() {
