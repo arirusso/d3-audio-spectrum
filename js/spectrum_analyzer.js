@@ -7,7 +7,7 @@ function SpectrumAnalyzer(audio) {
 }
 
 SpectrumAnalyzer.prototype.setResolution = function(n) {
-  this.resolution = this.linLog(this.audio.bufferSize / n)
+  this.resolution = this.linLog(this.audio.bufferSize / n);
   this.reset();
 }
 
@@ -57,7 +57,7 @@ SpectrumAnalyzer.prototype.withCurve = function(callback) {
   var segment = 0;
   var counter = 0;
   var index = 0;
-  while (index < this.length() - 1) {
+  while (index <= this.length() - 1) {
     callback(this, index, counter);
     index += (segment * this.curve) + 1;
     counter += 1;

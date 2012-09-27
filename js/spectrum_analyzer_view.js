@@ -26,9 +26,7 @@ SpectrumAnalyzerView.prototype._x = function(n) {
 }
 
 SpectrumAnalyzerView.prototype.barWidth = function() {
-  var bands = this.model.data.length || 512
-  var curveFactor = ((1024 / bands) - 2)
-  return (4096/this.model.resolution) + curveFactor;
+  return (4096/this.model.resolution);
 }
 
 SpectrumAnalyzerView.prototype.createChart = function() {
