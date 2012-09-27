@@ -59,7 +59,7 @@ SpectrumAnalyzer.prototype.withCurve = function(callback) {
   var index = 0;
   while (index < this.length() - 1) {
     callback(this, index, counter);
-    index += segment + 1;
+    index += (segment * this.curve) + 1;
     counter += 1;
     segmentCounter += 1;
     if (segmentCounter > segmentLength - 1) {
