@@ -1,3 +1,4 @@
+// This is where the audio is analyzed
 function SpectrumAnalyzer(audio) {
   this.audio = audio;
   this.analysis = this.audio.context.createJavaScriptNode(this.audio.bufferSize);
@@ -7,8 +8,7 @@ function SpectrumAnalyzer(audio) {
 SpectrumAnalyzer.prototype.setResolution = function(n) {
   this.data = [];
   this.delta = [];
-  this.resolution = Math.pow( 2, Math.round( Math.log(  this.audio.bufferSize/n) / Math.log( 2 ) ) );
-  console.log(this.resolution);
+  this.resolution = this.linLog(this.audio.bufferSize / n)
   var fftSize = this.resolution;
   this.audio.mono = new Float32Array(fftSize);
   this.fft = new FFT(fftSize, this.audio.sampleRate);
@@ -16,6 +16,10 @@ SpectrumAnalyzer.prototype.setResolution = function(n) {
   this.analysis.onaudioprocess = function(event) { 
     analyzer.audioReceived(event); 
   };
+}
+
+SpectrumAnalyzer.prototype.linLog = function(n) {
+  return Math.pow( 2, Math.round( Math.log( n ) / Math.log( 2 ) ) );
 }
 
 SpectrumAnalyzer.prototype.length = function() {
