@@ -26,7 +26,8 @@ SpectrumAnalyzerView.prototype._x = function(n) {
 }
 
 SpectrumAnalyzerView.prototype.barWidth = function() {
-  return (4096/this.model.resolution);
+  var base = (4096/this.model.resolution);
+  return base;
 }
 
 SpectrumAnalyzerView.prototype.createChart = function() {
