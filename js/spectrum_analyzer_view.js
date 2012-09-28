@@ -2,6 +2,7 @@ function SpectrumAnalyzerView(model, selector) {
   this.model = model;
   this.selector = selector;
   this.height = 500;
+  this.elementWidth = (document.getElementsByTagName("div")["spectrum_analyzer"].offsetWidth - 2)
   this.initialize();
 }
 
@@ -26,10 +27,8 @@ SpectrumAnalyzerView.prototype._x = function(n) {
 }
 
 SpectrumAnalyzerView.prototype.barWidth = function() {
-  var elementWidth = (document.getElementsByTagName("div")["spectrum_analyzer"].offsetWidth - 2)
   var dataLength = Math.min(this.model.length(), (this.model.data.length || this.model.getInitialData().length));
-  var width = elementWidth / dataLength;
-  return width;
+  return this.elementWidth / dataLength;
 }
 
 SpectrumAnalyzerView.prototype.createChart = function() {
