@@ -41,7 +41,14 @@ Application.prototype.setCurve = function(element) {
 }
 
 Application.prototype.togglePlay = function() {
-  this.audio.playing ? this.audio.stop() : this.play(); 
+  var element = document.getElementById('play')
+  if (this.audio.playing) { 
+    this.audio.stop();
+    element.value = "Play";
+  } else { 
+    this.play(); 
+    element.value = "Stop";
+  }
 }
 
 Application.prototype.stop = function() { 
