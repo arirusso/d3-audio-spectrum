@@ -36,10 +36,11 @@ SpectrumAnalyzer.prototype.length = function() {
   return this.fft.spectrum.length/2;
 }
 
-SpectrumAnalyzer.prototype.play = function() {
+SpectrumAnalyzer.prototype.play = function(callback) {
   var analyzer = this;
   this.audio.play(function() {
     analyzer.audio.connectProcessor(analyzer.analysis);
+    callback();
   });
 }
 
@@ -73,7 +74,7 @@ SpectrumAnalyzer.prototype.audioReceived = function(event) {
   this.audio.routeAudio(event);   
   this.fft.forward(this.audio.mono);
   this.withCurve(function(analyzer, index, counter) {
-    amplitude = analyzer.fft.spectrum[index] * 1000;
+    amplitude = analyzer.fft.spectrum[index] * 2000;
     analyzer.delta[counter] = amplitude - analyzer.data[counter];
     analyzer.data[counter] = amplitude;
   });

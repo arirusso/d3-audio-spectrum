@@ -21,7 +21,10 @@ Application.prototype.load = function() {
 }
 
 Application.prototype.play = function() {
-  this.model.play();
+  document.getElementById("loader").style.display = 'block';
+  this.model.play(function() {
+    document.getElementById("loader").style.display = 'none';
+  });
 }
 
 Application.prototype.setVolume = function(element) {

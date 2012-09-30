@@ -28,13 +28,11 @@ Audio.prototype.stop = function() {
 Audio.prototype.play = function(callback) {
   var source = this.source;
   var audio = this;
-  document.getElementById("loader").style.display = 'block';
   this.source.load(function() {
     audio.connect();
     source.source.loop = true;
     source.source.noteOn(0);
     audio.playing = true;
-    document.getElementById("loader").style.display = 'none';
     callback();
   });
 }
