@@ -8,7 +8,10 @@ InputAudioSource.prototype.load = function(callback) {
 }
 
 InputAudioSource.prototype.play = function() {}
-InputAudioSource.prototype.stop = function() {}
+
+InputAudioSource.prototype.stop = function() {
+  this.disconnect();
+}
 
 InputAudioSource.prototype.streamCallback = function(callback) {
   var source = this;
@@ -20,5 +23,9 @@ InputAudioSource.prototype.streamCallback = function(callback) {
 
 InputAudioSource.prototype.connect = function(connector) {
   this.source.connect(connector);
+}
+
+InputAudioSource.prototype.disconnect = function() {
+  this.source.disconnect();
 }
 

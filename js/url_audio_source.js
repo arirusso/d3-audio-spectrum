@@ -22,6 +22,7 @@ UrlAudioSource.prototype.play = function() {
 
 UrlAudioSource.prototype.stop = function() {
   this.source.noteOff(0);
+  this.disconnect();
 }
 
 UrlAudioSource.prototype.decode = function(response, callback) {
@@ -35,5 +36,9 @@ UrlAudioSource.prototype.decode = function(response, callback) {
 
 UrlAudioSource.prototype.connect = function(connector) {
   this.source.connect(connector);
+}
+
+UrlAudioSource.prototype.disconnect = function() {
+  this.source.disconnect();
 }
 
