@@ -2,7 +2,7 @@
 function SpectrumAnalyzer(audio) {
   this.audio = audio;
   this.analysis = this.audio.context.createJavaScriptNode(this.audio.bufferSize);
-  this.curve = 1;
+  this.curve = 8;
   this.intensity = 50;
   this.setResolution(1);
 }
