@@ -42,6 +42,8 @@ Application.prototype.onSourceLoaded = function(callback) {
 
 Application.prototype.play = function() {
   document.getElementById("loader").style.display = 'block';
+  var element = document.getElementById('play');
+  element.value = "Stop";
   this.model.play(function() {
     document.getElementById("loader").style.display = 'none';
   });
@@ -84,18 +86,13 @@ Application.prototype.toggleInput = function() {
 }
 
 Application.prototype.togglePlay = function() {
-  var element = document.getElementById('play');
-  if (this.audio.playing) { 
-    this.audio.stop();
-    element.value = "Play";
-  } else { 
-    this.play(); 
-    element.value = "Stop";
-  }
+  this.audio.playing ? this.stop() : this.play();
 }
 
 Application.prototype.stop = function() { 
   this.audio.stop();
+  var element = document.getElementById('play');
+  element.value = "Play";
 }
 
 Application.prototype.populateContext = function() {
