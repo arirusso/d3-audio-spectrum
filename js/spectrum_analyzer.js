@@ -3,6 +3,7 @@ function SpectrumAnalyzer(audio) {
   this.audio = audio;
   this.analysis = this.audio.context.createJavaScriptNode(this.audio.bufferSize);
   this.curve = 1;
+  this.intensity = 50;
   this.setResolution(1);
 }
 
@@ -59,7 +60,7 @@ SpectrumAnalyzer.prototype.withCurve = function(callback) {
   var counter = 0;
   var index = 0;
   while (index <= this.length() - 1) {
-    callback(this, index, counter);
+    callback(index, counter);
     index += (segment * this.curve) + 1;
     counter += 1;
     segmentCounter += 1;
@@ -70,12 +71,15 @@ SpectrumAnalyzer.prototype.withCurve = function(callback) {
   }  
 }
 
+SpectrumAnalyzer.prototype.populateData = function(index, counter) {
+  amplitude = this.fft.spectrum[index] * (this.intensity * 200);
+  this.delta[counter] = amplitude - this.data[counter];
+  this.data[counter] = amplitude;
+}
+
 SpectrumAnalyzer.prototype.audioReceived = function(event) {
+  var analyzer = this;
   this.audio.routeAudio(event);   
   this.fft.forward(this.audio.mono);
-  this.withCurve(function(analyzer, index, counter) {
-    amplitude = analyzer.fft.spectrum[index] * 2000;
-    analyzer.delta[counter] = amplitude - analyzer.data[counter];
-    analyzer.data[counter] = amplitude;
-  });
+  this.withCurve(function(index, counter) { analyzer.populateData(index, counter) });
 }

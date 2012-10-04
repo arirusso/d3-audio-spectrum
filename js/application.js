@@ -38,6 +38,10 @@ Application.prototype.setResolution = function(element) {
   this.view.reset();
 }
 
+Application.prototype.setIntensity = function(element) {
+  this.model.intensity = Number(element.value);
+}
+
 Application.prototype.setCurve = function(element) {
   this.model.setCurve(element.value);  
   this.view.reset();
@@ -82,6 +86,10 @@ Application.play = function() {
 
 Application.setVolume = function(element) {
   this.instance.setVolume(element);  
+}
+
+Application.setIntensity = function(element) {
+  this.instance.setIntensity(element);
 }
 
 Application.setResolution = function(element) {

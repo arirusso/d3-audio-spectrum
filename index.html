@@ -16,11 +16,11 @@
     #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; display:none; }
     #loading { padding: 1em; }
     #controls { display:none; clear:both; }
-    #buttons { padding-right:2em; }
-    #sliders { margin-left:4em; }
+    #buttons { padding-right:1em; }
+    #sliders { margin-left:2em; }
     .slider { margin-right:1.3em; }
     .button#play { width:4em; }
-    input[type=range] { -webkit-appearance: none; background-color: #222; border:1px solid #666; padding:0.2em; }
+    input[type=range] { width:10em; -webkit-appearance: none; background-color: #222; border:1px solid #666; padding:0.2em; }
   </style>
 </head>
 
@@ -42,6 +42,7 @@
         </span>
         <span id="sliders">
           Gain: <input class="slider" type="range" min="0" max="100" value="100" onchange="Application.setVolume(this);">
+          Intensity: <input class="slider" type="range" min="0" max="100" value="50" onchange="Application.setIntensity(this);">
           Resolution: <input class="slider" type="range" min="1" max="48" value="48" onchange="Application.setResolution(this);">
           Curve: <input class="slider" type="range" min="1" max="64" value="1" onchange="Application.setCurve(this);">
         </span>
