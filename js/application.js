@@ -25,11 +25,9 @@ Application.prototype.sourceFromUrl = function(url, callback) {
   });
 }
 
-Application.prototype.sourceFromInput = function(callback) {
+Application.prototype.sourceFromInput = function() {
   var app = this;
-  return new InputAudioSource(this.context, function() { 
-    app.onSourceLoaded(callback); 
-  });
+  return new InputAudioSource(this.context);
 }
 
 Application.prototype.onSourceLoaded = function(callback) {
@@ -76,8 +74,9 @@ Application.prototype.toggleInput = function() {
   this.stop();
   if (this.source instanceof UrlAudioSource) {
     element.value = "Use Audio File";
-    this.source = this.sourceFromInput(callback);
-    console.log(this.source)
+    this.source = this.sourceFromInput();
+    this.onSourceLoaded(); 
+    this.play();
   } else if (this.source instanceof InputAudioSource) {
     element.value = "Use Audio Input";
     this.source = this.sourceFromUrl(this.url, callback);

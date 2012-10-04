@@ -1,6 +1,5 @@
-function InputAudioSource(context, callback) {
+function InputAudioSource(context) {
   this.context = context;
-  this.load(callback);
 }
 
 InputAudioSource.prototype.load = function(callback) {
