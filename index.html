@@ -5,6 +5,7 @@
   <script src="lib/d3.v2.js"></script>
   <script src="js/application.js"></script>
   <script src="js/audio.js"></script>
+  <script src="js/input_audio_source.js"></script>
   <script src="js/spectrum_analyzer.js"></script>
   <script src="js/spectrum_analyzer_view.js"></script>
   <script src="js/url_audio_source.js"></script>
@@ -39,6 +40,7 @@
       <p>
         <span id="buttons">
           <input id="play" class="button" type="button" onclick="Application.togglePlay();" value="Play">
+          <input id="input" class="button" type="button" onclick="Application.toggleInput();" value="Use Audio Input">
         </span>
         <span id="sliders">
           Gain: <input class="slider" type="range" min="0" max="100" value="100" onchange="Application.setVolume(this);">

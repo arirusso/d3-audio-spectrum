@@ -1,6 +1,5 @@
-function Audio(source, sampleRate) {
-  this.context = source.context;
-  this.source = source;
+function Audio(context, sampleRate) {
+  this.context = context;
   this.sampleRate = sampleRate || 44100;
   this.playing = false;
   this.bufferSize = 2048;
@@ -21,7 +20,7 @@ Audio.prototype.setVolume = function(value) {
 }
 
 Audio.prototype.stop = function() { 
-  this.source.source.noteOff(0);
+  this.source.stop();
   this.playing = false;
 }
 
@@ -30,8 +29,7 @@ Audio.prototype.play = function(callback) {
   var audio = this;
   this.source.load(function() {
     audio.connect();
-    source.source.loop = true;
-    source.source.noteOn(0);
+    source.play();
     audio.playing = true;
     callback();
   });

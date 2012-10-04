@@ -1,4 +1,5 @@
 function Application() {
+  this.url = "media/sweep.mp3";
   this.audio;
   this.context;
   this.model;
@@ -7,17 +8,38 @@ function Application() {
 }
 
 Application.prototype.load = function() {
-  var application = this;
+  var app = this;
   this.populateContext();
-  this.source = new UrlAudioSource(this.context, "media/sweep.mp3", function() {
-    document.getElementById("loading").style.display = 'none';
-    document.getElementById("spectrum_analyzer").style.display = 'block';
-    document.getElementById("controls").style.display = 'inline';
-    application.audio = new Audio(application.source);
-    application.model = new SpectrumAnalyzer(application.audio);
-    application.view = new SpectrumAnalyzerView(application.model, "#spectrum_analyzer");
-    application.view.update();
+  this.audio = new Audio(this.context);
+  this.source = this.sourceFromUrl(this.url, function() {
+    app.model = new SpectrumAnalyzer(app.audio);
+    app.view = new SpectrumAnalyzerView(app.model, "#spectrum_analyzer");
+    app.view.update();
   });
+}
+
+Application.prototype.sourceFromUrl = function(url, callback) {
+  var app = this;
+  return new UrlAudioSource(this.context, url, function() { 
+    app.onSourceLoaded(callback); 
+  });
+}
+
+Application.prototype.sourceFromInput = function(callback) {
+  var app = this;
+  return new InputAudioSource(this.context, function() { 
+    app.onSourceLoaded(callback); 
+  });
+}
+
+Application.prototype.onSourceLoaded = function(callback) {
+  document.getElementById("loading").style.display = 'none';
+  document.getElementById("spectrum_analyzer").style.display = 'block';
+  document.getElementById("controls").style.display = 'inline';
+  this.audio.source = this.source;
+  if (callback != null) {
+    callback();
+  }
 }
 
 Application.prototype.play = function() {
@@ -43,8 +65,23 @@ Application.prototype.setCurve = function(element) {
   this.view.reset();
 }
 
+Application.prototype.toggleInput = function() {
+  var app = this;
+  var element = document.getElementById('input');
+  var callback = function() { app.play(); };
+  this.stop();
+  if (this.source instanceof UrlAudioSource) {
+    element.value = "Use Audio File";
+    this.source = this.sourceFromInput(callback);
+    console.log(this.source)
+  } else if (this.source instanceof InputAudioSource) {
+    element.value = "Use Audio Input";
+    this.source = this.sourceFromUrl(this.url, callback);
+  }
+}
+
 Application.prototype.togglePlay = function() {
-  var element = document.getElementById('play')
+  var element = document.getElementById('play');
   if (this.audio.playing) { 
     this.audio.stop();
     element.value = "Play";
@@ -90,6 +127,10 @@ Application.setResolution = function(element) {
 
 Application.setCurve = function(element) {
   this.instance.setCurve(element);  
+}
+
+Application.toggleInput = function() {
+  this.instance.toggleInput();
 }
 
 Application.togglePlay = function() {
