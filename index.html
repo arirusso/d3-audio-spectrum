@@ -9,7 +9,6 @@
   <script src="js/spectrum_analyzer.js"></script>
   <script src="js/spectrum_analyzer_view.js"></script>
   <script src="js/url_audio_source.js"></script>
-  <script language="javascript">window.onload = Application.load();</script>
   <style>
     body { background: #111; padding:0 2em 2em 2em; }
     h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
@@ -22,6 +21,7 @@
     .slider { margin-right:1.3em; }
     .button#play { width:4em; }
     input[type=range] { width:10em; -webkit-appearance: none; background-color: #222; border:1px solid #666; padding:0.2em; }
+    #audioUrl { width: 500px; }
   </style>
 </head>
 
@@ -29,9 +29,18 @@
   <div role="main">
     <h1>Spectrum Analyzer</h1>
     <h4>HTML5 Audio / <a href="http://d3js.org">d3.js</a></h3>
+        <div id="entry">
+          <form id="entries">
+            <p>
+            Audio URL: <input name="src" class="input" id="audioUrl">
+            <input type="submit" value="Submit">
+            </p>
+          </form>
+        </div>
+
     <div id="loading">
       <img id="progress" src="images/loader.gif"/>
-      <p>Loading audio file...</p>
+      <p>Loading audio...</p>
     </div>
     <div id="spectrum_analyzer">
       <img id="loader" src="images/loader.gif" />
@@ -58,4 +67,5 @@
     </h2>
   </div>
 </body>
+<script language="javascript">window.onload = Application.load();</script>
 </html>
