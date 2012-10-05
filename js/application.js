@@ -106,7 +106,7 @@ Application.prototype.toggleInput = function() {
   var callback = function() { app.play(); };
   this.stop();
   if (this.source instanceof UrlAudioSource) {
-    element.value = "Use Audio File";
+    element.value = "Use Audio URL";
     this.source = this.sourceFromInput();
     this.onSourceLoaded(); 
     this.play();
