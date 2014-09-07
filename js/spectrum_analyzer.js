@@ -1,7 +1,7 @@
 // This is where the audio is analyzed
 function SpectrumAnalyzer(audio) {
   this.audio = audio;
-  this.analysis = this.audio.context.createJavaScriptNode(this.audio.bufferSize);
+  this.analysis = this.audio.context.createScriptProcessor(this.audio.bufferSize);
   this.curve = 8;
   this.intensity = 50;
   this.setResolution(1);
