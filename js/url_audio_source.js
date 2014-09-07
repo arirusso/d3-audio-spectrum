@@ -17,11 +17,11 @@ UrlAudioSource.prototype.load = function(callback) {
 
 UrlAudioSource.prototype.play = function() {
   this.source.loop = true;
-  this.source.noteOn(0);
+  this.source.start(0);
 }
 
 UrlAudioSource.prototype.stop = function() {
-  this.source.noteOff(0);
+  this.source.stop(0);
   this.disconnect();
 }
 
