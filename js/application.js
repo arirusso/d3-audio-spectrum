@@ -127,14 +127,14 @@ Application.prototype.stop = function() {
 }
 
 Application.prototype.populateContext = function() {
-  if (! window.AudioContext) {
-	  if (! window.webkitAudioContext) {
-      alert("Sorry, your browser is not supported.");
-      return;
-		}
-		window.AudioContext = window.webkitAudioContext;
+  if (typeof AudioContext !== "undefined") {
     this.context = new AudioContext();
+  } else if (typeof webkitAudioContext !== "undefined") {
+    window.AudioContext = window.webkitAudioContext;
+  } else {
+    throw new Error('AudioContext not supported. :(');
   }
+  this.context = new AudioContext();
 }
 
 // Class Methods
