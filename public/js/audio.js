@@ -6,7 +6,7 @@ function Audio(context, sampleRate) {
 }
 
 Audio.prototype.connect = function() {
-  this.gain = this.context.createGainNode();
+  this.gain = this.context.createGain();
   this.source.connect(this.gain);
 }
 
