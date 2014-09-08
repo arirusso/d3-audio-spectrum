@@ -1,8 +1,6 @@
 require "rack"
 require "rack/static"
-require "json"
 require "net/http"
-require "yaml"
 require "uri"
 
 @root = File.dirname(__FILE__)
