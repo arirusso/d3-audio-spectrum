@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="lib/dsp.js"></script>
+  <script src="lib/d3.v2.js"></script>
+  <script src="js/application.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/input_audio_source.js"></script>
+  <script src="js/spectrum_analyzer.js"></script>
+  <script src="js/spectrum_analyzer_view.js"></script>
+  <script src="js/url_audio_source.js"></script>
+  <style>
+    body { background: #111; padding:0 2em 2em 2em; }
+    h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
+    #loader { padding: 3em; display:none; }
+    #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; display:none; }
+    #loading { padding: 1em; }
+    #controls { display:none; clear:both; }
+    #buttons { padding-right:1em; }
+    #sliders { margin-left:2em; }
+    .slider { margin-right:1.3em; }
+    .button#play { width:4em; }
+    input[type=range] { width:10em; -webkit-appearance: none; background-color: #222; border:1px solid #666; padding:0.2em; }
+    #audioUrl { width: 500px; }
+  </style>
+</head>
+
+<body>
+  <div role="main">
+    <h1>Spectrum Analyzer</h1>
+    <h4>HTML5 Audio / <a href="http://d3js.org">d3.js</a></h3>
+        <div id="entry">
+          <form id="entries">
+            <p>
+            Audio URL: <input name="src" class="input" id="audioUrl">
+            <input type="submit" value="Submit">
+            </p>
+          </form>
+        </div>
+
+    <div id="loading">
+      <img id="progress" src="images/loader.gif"/>
+      <p>Loading audio...</p>
+    </div>
+    <div id="spectrum_analyzer">
+      <img id="loader" src="images/loader.gif" />
+    </div>
+    <div id="controls">
+      <p>
+        <span id="buttons">
+          <input id="play" class="button" type="button" onclick="Application.togglePlay();" value="Play">
+          <input id="input" class="button" type="button" onclick="Application.toggleInput();" value="Use Audio Input">
+        </span>
+        <span id="sliders">
+          Gain: <input class="slider" type="range" min="0" max="100" value="100" onchange="Application.setVolume(this);">
+          Intensity: <input class="slider" type="range" min="0" max="100" value="50" onchange="Application.setIntensity(this);">
+          Resolution: <input class="slider" type="range" min="1" max="48" value="48" onchange="Application.setResolution(this);">
+          Curve: <input class="slider" type="range" min="1" max="64" value="8" onchange="Application.setCurve(this);">
+        </span>
+      </p>
+    </div>
+    <h2>
+      <ul>
+        <li><a href="https://github.com/arirusso/d3-audio-spectrum">github</a></li>
+        <li><a href="http://tx81z.blogspot.com/2012/10/quick-project-d3-html5-web-audio.html">blog post</a></li>
+      </ul>
+    </h2>
+  </div>
+</body>
+<script language="javascript">window.onload = Application.load();</script>
+</html>
