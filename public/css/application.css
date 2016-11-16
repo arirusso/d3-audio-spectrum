@@ -1,0 +1,12 @@
+body { background: #111; padding:0 2em 2em 2em; }
+h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
+#widget_spinner { padding: 3em; display:none; }
+#spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; display:none; }
+#audio_spinner { padding: 1em; }
+#controls { display:none; clear:both; }
+#buttons { padding-right:1em; }
+#sliders { margin-left:2em; }
+.slider { margin-right:1.3em; }
+.button#play { width:4em; }
+input[type=range] { width:10em; -webkit-appearance: none; background-color: #222; border:1px solid #666; padding:0.2em; }
+#audioUrl { width: 500px; }

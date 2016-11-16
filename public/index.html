@@ -2,35 +2,23 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" id="style-css" href="css/application.css" type="text/css" media="all" />
   <script src="lib/dsp.js"></script>
   <script src="lib/d3.min.js"></script>
   <script src="lib/d3-scale.min.js"></script>
   <script src="js/application.js"></script>
   <script src="js/audio.js"></script>
-  <script src="js/input_audio_source.js"></script>
+  <script src="js/audio_input.js"></script>
+  <script src="js/page.js"></script>
+  <script src="js/remote_audio_file.js"></script>
   <script src="js/spectrum_analyzer.js"></script>
   <script src="js/spectrum_analyzer_view.js"></script>
-  <script src="js/url_audio_source.js"></script>
-  <style>
-    body { background: #111; padding:0 2em 2em 2em; }
-    h1, h2, h3, h4, a, p { color: #ddd; font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif; }
-    #loader { padding: 3em; display:none; }
-    #spectrum_analyzer { border: 1px solid #666; height:500px; width:1024px; display:none; }
-    #loading { padding: 1em; }
-    #controls { display:none; clear:both; }
-    #buttons { padding-right:1em; }
-    #sliders { margin-left:2em; }
-    .slider { margin-right:1.3em; }
-    .button#play { width:4em; }
-    input[type=range] { width:10em; -webkit-appearance: none; background-color: #222; border:1px solid #666; padding:0.2em; }
-    #audioUrl { width: 500px; }
-  </style>
 </head>
 
 <body>
   <div role="main">
     <h1>Spectrum Analyzer</h1>
-    <h4>HTML5 Audio / <a href="http://d3js.org">d3.js</a></h3>
+    <h4>HTML5 Audio / <a href="https://d3js.org">d3.js</a></h3>
         <div id="entry">
           <form id="entries">
             <p>
@@ -40,12 +28,12 @@
           </form>
         </div>
 
-    <div id="loading">
+    <div id="audio_spinner">
       <img id="progress" src="images/loader.gif"/>
       <p>Loading audio...</p>
     </div>
     <div id="spectrum_analyzer">
-      <img id="loader" src="images/loader.gif" />
+      <img id="widget_spinner" src="images/loader.gif" />
     </div>
     <div id="controls">
       <p>
