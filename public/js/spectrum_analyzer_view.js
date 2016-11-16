@@ -7,13 +7,13 @@ function SpectrumAnalyzerView(model, selector) {
 }
 
 SpectrumAnalyzerView.prototype.initialize = function() {
-  this._y = d3.scale.linear()
+  this._y = d3.scaleLinear()
     .domain([0, this.height])
     .rangeRound([0, this.height]);
-  this.color = d3.scale.linear()
+  this.color = d3.scaleLinear()
     .domain([0, 500])
     .range(["blue", "red"]);
-  this.amplitude = d3.scale.linear()
+  this.amplitude = d3.scaleLinear()
     .domain([0,10])
     .range([0,500]);
   this.createChart();
@@ -21,7 +21,7 @@ SpectrumAnalyzerView.prototype.initialize = function() {
 }
 
 SpectrumAnalyzerView.prototype._x = function(n) {
-  return d3.scale.linear()
+  return d3.scaleLinear()
     .domain([0, 1])
     .range([0, this.barWidth()])(n);
 }
@@ -41,7 +41,7 @@ SpectrumAnalyzerView.prototype.createChart = function() {
 }
 
 SpectrumAnalyzerView.prototype.reset = function() {
-  d3.select("svg").remove(); 
+  d3.select("svg").remove();
   this.createChart();
   this.initializeChart();
 }
