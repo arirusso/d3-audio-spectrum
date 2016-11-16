@@ -21,3 +21,12 @@ There is a config.ru file included so that you can serve the project locally usi
 
 A frequency sweep mp3 is included for demo purposes but any audio file can be used.
 
+### Author
+
+[Ari Russo](http://github.com/arirusso) <ari.russo at gmail.com>
+
+### License
+
+Apache 2.0, See the file LICENSE
+
+Copyright (c) 2012 Ari Russo  
