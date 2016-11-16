@@ -11,7 +11,7 @@ SA.Application = function() {
   this.model;
   this.view;
   this.page = new SA.Page();
-  this._populateAudioUrl("media/sweep.mp3");
+  this._populateAudioUrl("media/04182011.mp3");
 }
 
 /*
