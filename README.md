@@ -1,6 +1,6 @@
 # Spectrum Analyzer Demo
 
-See it here: http://d3-spectrum.herokuapp.com
+See it here: https://d3-spectrum.herokuapp.com
 
 This is a spectrum analyzer demo that I did for fun using the HTML5 Web Audio API, [dsp.js](https://github.com/corbanbrook/dsp.js) and [d3.js](http://d3js.org).
 
