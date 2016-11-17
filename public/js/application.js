@@ -11,10 +11,10 @@ function Application() {
 Application.prototype.populateAudioUrl = function(defaultUrl) {
   var src = this.query().src;
   if (src != null && src != "") {
-    this.url = "/audio?src=" + this.query().src;
-    document.getElementById("audioUrl").value = unescape(src);
+    this.audioUrl = "/audio?src=" + this.query().src;
+    this.page.setUrlInputValue(unescape(src));
   } else {
-    this.url = defaultUrl;
+    this.audioUrl = defaultUrl;
   }
 }
 
@@ -43,9 +43,9 @@ Application.prototype.load = function() {
   var app = this;
   this.populateContext();
   this.audio = new Audio(this.context);
-  this.source = this.sourceFromUrl(this.url, function() {
+  this.source = this.sourceFromUrl(this.audioUrl, function() {
     app.model = new SpectrumAnalyzer(app.audio);
-    app.view = new SpectrumAnalyzerView(app.model, "#spectrum_analyzer");
+    app.view = new SpectrumAnalyzerView(app.model, "#spectrumAnalyzer");
     app.view.update();
   });
 }
@@ -112,7 +112,7 @@ Application.prototype.toggleInput = function() {
     this.play();
   } else if (this.source instanceof AudioInput) {
     this.page.setUrlInputValue("Use Audio Input");
-    this.source = this.sourceFromUrl(this.url, callback);
+    this.source = this.sourceFromUrl(this.audioUrl, callback);
   }
 }
 

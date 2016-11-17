@@ -5,23 +5,23 @@ Page.prototype.showControls = function() {
 }
 
 Page.prototype.showAnalyzer = function() {
-  document.getElementById("spectrum_analyzer").style.display = "block";
+  document.getElementById("spectrumAnalyzer").style.display = "block";
 }
 
 Page.prototype.hideAudioSpinner = function() {
-  document.getElementById("audio_spinner").style.display = "none";
+  document.getElementById("audioSpinner").style.display = "none";
 }
 
 Page.prototype.showWidgetSpinner = function() {
-  document.getElementById("widget_spinner").style.display = "block";
+  document.getElementById("widgetSpinner").style.display = "block";
 }
 
 Page.prototype.hideWidgetSpinner = function() {
-  document.getElementById("widget_spinner").style.display = "none";
+  document.getElementById("widgetSpinner").style.display = "none";
 }
 
 Page.prototype.setUrlInputValue = function(value) {
-  var element = document.getElementById("input");
+  var element = document.getElementById("audioUrl");
   element.value = value;
 }
 

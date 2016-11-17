@@ -2,7 +2,7 @@ function SpectrumAnalyzerView(model, selector) {
   this.model = model;
   this.selector = selector;
   this.height = 500;
-  this.elementWidth = (document.getElementsByTagName("div")["spectrum_analyzer"].offsetWidth - 2)
+  this.elementWidth = (document.getElementsByTagName("div")["spectrumAnalyzer"].offsetWidth - 2)
   this.initialize();
 }
 
