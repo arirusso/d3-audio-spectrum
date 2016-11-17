@@ -20,6 +20,11 @@ Page.prototype.hideWidgetSpinner = function() {
   document.getElementById("widgetSpinner").style.display = "none";
 }
 
+Page.prototype.setInputSelectButtonText = function(value) {
+  var element = document.getElementById("inputSelect");
+  element.value = value;
+}
+
 Page.prototype.setUrlInputValue = function(value) {
   var element = document.getElementById("audioUrl");
   element.value = value;

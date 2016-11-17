@@ -10,7 +10,7 @@ function Application() {
 
 Application.prototype.populateAudioUrl = function(defaultUrl) {
   var src = this.query().src;
-  if (src != null && src != "") {
+  if (src !== undefined && src !== null && src != "") {
     this.audioUrl = "/audio?src=" + this.query().src;
     this.page.setUrlInputValue(unescape(src));
   } else {
@@ -22,7 +22,7 @@ Application.prototype.query = function () {
   var query_string = {};
   var query = window.location.search.substring(1);
   var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
+  for (var i=0; i<vars.length; i++) {
     var pair = vars[i].split("=");
     // If first entry with this name
     if (typeof query_string[pair[0]] === "undefined") {
@@ -67,7 +67,7 @@ Application.prototype.onSourceLoaded = function(callback) {
   this.page.showAnalyzer();
   this.page.showControls();
   this.audio.source = this.source;
-  if (callback != null) {
+  if (callback !== undefined && callback !== null) {
     callback();
   }
 }
@@ -88,7 +88,7 @@ Application.prototype.setVolume = function(element) {
 }
 
 Application.prototype.setResolution = function(element) {
-  this.model.setResolution(48/element.value);
+  this.model.setResolution(48 / element.value);
   this.view.reset();
 }
 
@@ -101,18 +101,25 @@ Application.prototype.setCurve = function(element) {
   this.view.reset();
 }
 
-Application.prototype.toggleInput = function() {
-  var app = this;
-  var callback = function() { app.play(); };
+Application.prototype.selectAudioFile = function() {
+  var application = this;
+  this.page.setInputSelectButtonText("Use Audio Input");
+  this.source = this.sourceFromUrl(this.audioUrl);
+}
+
+Application.prototype.selectAudioInput = function() {
+  this.page.setInputSelectButtonText("Use Audio URL")
+  this.source = this.sourceFromInput();
+  this.onSourceLoaded();
+  this.play();
+}
+
+Application.prototype.toggleAudioInput = function() {
   this.stop();
   if (this.source instanceof RemoteAudioFile) {
-    this.page.setUrlInputValue("Use Audio URL")
-    this.source = this.sourceFromInput();
-    this.onSourceLoaded();
-    this.play();
+    this.selectAudioInput();
   } else if (this.source instanceof AudioInput) {
-    this.page.setUrlInputValue("Use Audio Input");
-    this.source = this.sourceFromUrl(this.audioUrl, callback);
+    this.selectAudioFile();
   }
 }
 
@@ -131,7 +138,7 @@ Application.prototype.populateContext = function() {
   } else if (typeof webkitAudioContext !== "undefined") {
     window.AudioContext = window.webkitAudioContext;
   } else {
-    throw new Error('AudioContext not supported. :(');
+    throw new Error("AudioContext not supported.");
   }
   this.context = new AudioContext();
 }
@@ -163,8 +170,8 @@ Application.setCurve = function(element) {
   this.instance.setCurve(element);
 }
 
-Application.toggleInput = function() {
-  this.instance.toggleInput();
+Application.toggleAudioInput = function() {
+  this.instance.toggleAudioInput();
 }
 
 Application.togglePlay = function() {
