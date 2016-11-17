@@ -1,0 +1,2 @@
+SA.Analysis = function() {
+}

@@ -1,11 +1,11 @@
-function RemoteAudioFile(context, url, callback) {
+SA.Audio.RemoteFile = function(context, url, callback) {
   this.context = context
   this.url = url;
   this.isPlaying = false;
   this.load(callback);
 }
 
-RemoteAudioFile.prototype.load = function(callback) {
+SA.Audio.RemoteFile.prototype.load = function(callback) {
   var source = this;
   var request = new XMLHttpRequest();
   request.open("GET", this.url, true);
@@ -16,13 +16,13 @@ RemoteAudioFile.prototype.load = function(callback) {
   request.send();
 }
 
-RemoteAudioFile.prototype.play = function() {
+SA.Audio.RemoteFile.prototype.play = function() {
   this.isPlaying = true;
   this.source.loop = true;
   this.source.start(0);
 }
 
-RemoteAudioFile.prototype.stop = function() {
+SA.Audio.RemoteFile.prototype.stop = function() {
   if (this.isPlaying) {
     this.source.stop(0);
     this.disconnect();
@@ -30,19 +30,22 @@ RemoteAudioFile.prototype.stop = function() {
   this.isPlaying = false;
 }
 
-RemoteAudioFile.prototype.decode = function(response, callback) {
+SA.Audio.RemoteFile.prototype.decode = function(response, callback) {
   var source = this;
   this.source = this.context.createBufferSource();
-  this.context.decodeAudioData(response, function(buffer) {
-    source.source.buffer = buffer;
-    callback();
-  }, function() { });
+  this.context.decodeAudioData(response,
+    function(buffer) {
+      source.source.buffer = buffer;
+      callback();
+    },
+    function() { }
+  );
 }
 
-RemoteAudioFile.prototype.connect = function(connector) {
+SA.Audio.RemoteFile.prototype.connect = function(connector) {
   this.source.connect(connector);
 }
 
-RemoteAudioFile.prototype.disconnect = function() {
+SA.Audio.RemoteFile.prototype.disconnect = function() {
   this.source.disconnect();
 }

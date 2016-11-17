@@ -1,4 +1,4 @@
-function SpectrumAnalyzerView(model, selector) {
+SA.Analysis.View = function(model, selector) {
   this.model = model;
   this.selector = selector;
   this.height = 500;
@@ -6,7 +6,7 @@ function SpectrumAnalyzerView(model, selector) {
   this.initialize();
 }
 
-SpectrumAnalyzerView.prototype.initialize = function() {
+SA.Analysis.View.prototype.initialize = function() {
   this._y = d3.scaleLinear()
     .domain([0, this.height])
     .rangeRound([0, this.height]);
@@ -20,18 +20,18 @@ SpectrumAnalyzerView.prototype.initialize = function() {
   this.initializeChart();
 }
 
-SpectrumAnalyzerView.prototype._x = function(n) {
+SA.Analysis.View.prototype._x = function(n) {
   return d3.scaleLinear()
     .domain([0, 1])
     .range([0, this.barWidth()])(n);
 }
 
-SpectrumAnalyzerView.prototype.barWidth = function() {
+SA.Analysis.View.prototype.barWidth = function() {
   var dataLength = Math.min(this.model.length(), (this.model.data.length || this.model.getInitialData().length));
   return this.elementWidth / dataLength;
 }
 
-SpectrumAnalyzerView.prototype.createChart = function() {
+SA.Analysis.View.prototype.createChart = function() {
   var data = this.model.getInitialData();
 
   this.chart = d3.select(this.selector).append("svg")
@@ -40,13 +40,13 @@ SpectrumAnalyzerView.prototype.createChart = function() {
     .attr("height", this.height);
 }
 
-SpectrumAnalyzerView.prototype.reset = function() {
+SA.Analysis.View.prototype.reset = function() {
   d3.select("svg").remove();
   this.createChart();
   this.initializeChart();
 }
 
-SpectrumAnalyzerView.prototype.initializeChart = function() {
+SA.Analysis.View.prototype.initializeChart = function() {
   var view = this;
   var data = this.model.getInitialData();
 
@@ -60,7 +60,7 @@ SpectrumAnalyzerView.prototype.initializeChart = function() {
     .attr("height", function(d) { return 0; } );
 }
 
-SpectrumAnalyzerView.prototype.update = function() {
+SA.Analysis.View.prototype.update = function() {
   var view = this;
   var data = this.model.data;
 
@@ -75,7 +75,7 @@ SpectrumAnalyzerView.prototype.update = function() {
   this.enqueueNextUpdate()
 }
 
-SpectrumAnalyzerView.prototype.enqueueNextUpdate = function() {
+SA.Analysis.View.prototype.enqueueNextUpdate = function() {
   var view = this;
   timeout = setTimeout(function() { view.update() }, 50);
   return timeout;

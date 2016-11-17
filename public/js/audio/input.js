@@ -1,9 +1,9 @@
-function AudioInput(context) {
+SA.Audio.Input = function(context) {
   this.context = context;
 }
 
-AudioInput.prototype.load = function(callback) {
-  AudioInput.ensureUserMediaIsInitialized();
+SA.Audio.Input.prototype.load = function(callback) {
+  SA.Audio.Input.ensureUserMediaIsInitialized();
   var source = this;
   var sourceCallback = function(sourceInfos) {
     source.sourceLoadedCallback(sourceInfos, callback);
@@ -11,41 +11,41 @@ AudioInput.prototype.load = function(callback) {
   MediaStreamTrack.getSources(sourceCallback);
 }
 
-AudioInput.prototype.initializeSource = function(sourceInfo, callback) {
-  var args = AudioInput.getSystemArgs(sourceInfo);
+SA.Audio.Input.prototype.initializeSource = function(sourceInfo, callback) {
+  var args = SA.Audio.Input.getSystemArgs(sourceInfo);
   var errorCallback = function(error) {
     console.log(error);
   }
   navigator.getUserMedia(args, this.getStreamLoadedCallback(callback), errorCallback);
 }
 
-AudioInput.prototype.play = function() {}
+SA.Audio.Input.prototype.play = function() {}
 
-AudioInput.prototype.stop = function() {
+SA.Audio.Input.prototype.stop = function() {
   this.disconnect();
 }
 
-AudioInput.prototype.connect = function(connector) {
+SA.Audio.Input.prototype.connect = function(connector) {
   this.source.connect(connector);
 }
 
-AudioInput.prototype.disconnect = function() {
+SA.Audio.Input.prototype.disconnect = function() {
   this.source.disconnect();
 }
 
-AudioInput.prototype.getStreamLoadedCallback = function(callback) {
+SA.Audio.Input.prototype.getStreamLoadedCallback = function(callback) {
   var source = this;
   return function(stream) {
     source.streamLoadedCallback(stream, callback);
   }
 }
 
-AudioInput.prototype.streamLoadedCallback = function(stream, callback) {
+SA.Audio.Input.prototype.streamLoadedCallback = function(stream, callback) {
   this.source = this.context.createMediaStreamSource(stream, callback);
   callback();
 }
 
-AudioInput.prototype.sourceLoadedCallback = function(sourceInfos, callback) {
+SA.Audio.Input.prototype.sourceLoadedCallback = function(sourceInfos, callback) {
   for (var i = 0; i != sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
     if (sourceInfo.kind === "audio") {
@@ -54,18 +54,18 @@ AudioInput.prototype.sourceLoadedCallback = function(sourceInfos, callback) {
   }
 }
 
-AudioInput.getUserMedia = function() {
+SA.Audio.Input.getUserMedia = function() {
   return navigator.getUserMedia || navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia || navigator.msGetUserMedia;
 }
 
-AudioInput.ensureUserMediaIsInitialized = function() {
+SA.Audio.Input.ensureUserMediaIsInitialized = function() {
   if (navigator.getUserMedia == null) {
     navigator.getUserMedia = AudioInput.getUserMedia();
   }
 }
 
-AudioInput.getSystemArgs = function(sourceInfo) {
+SA.Audio.Input.getSystemArgs = function(sourceInfo) {
   return {
     audio: {
       optional: [

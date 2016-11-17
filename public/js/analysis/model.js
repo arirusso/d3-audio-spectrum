@@ -1,5 +1,5 @@
 // This is where the audio is analyzed
-function SpectrumAnalyzer(audio) {
+SA.Analysis.Model = function(audio) {
   this.audio = audio;
   this.analysis = this.audio.context.createScriptProcessor(this.audio.bufferSize);
   this.curve = 8;
@@ -7,37 +7,37 @@ function SpectrumAnalyzer(audio) {
   this.setResolution(1);
 }
 
-SpectrumAnalyzer.prototype.setResolution = function(n) {
+SA.Analysis.Model.prototype.setResolution = function(n) {
   this.resolution = this.linLog(this.audio.bufferSize / n);
   this.reset();
 }
 
-SpectrumAnalyzer.prototype.setCurve = function(n) {
+SA.Analysis.Model.prototype.setCurve = function(n) {
   this.curve = n;
   this.reset();
 }
 
-SpectrumAnalyzer.prototype.reset = function() {
+SA.Analysis.Model.prototype.reset = function() {
   this.data = [];
   this.delta = [];
   var fftSize = this.resolution;
   this.audio.mono = new Float32Array(fftSize);
   this.fft = new FFT(fftSize, this.audio.sampleRate);
   var analyzer = this;
-  this.analysis.onaudioprocess = function(event) { 
-    analyzer.audioReceived(event); 
+  this.analysis.onaudioprocess = function(event) {
+    analyzer.audioReceived(event);
   };
 }
 
-SpectrumAnalyzer.prototype.linLog = function(n) {
+SA.Analysis.Model.prototype.linLog = function(n) {
   return Math.pow( 2, Math.round( Math.log( n ) / Math.log( 2 ) ) );
 }
 
-SpectrumAnalyzer.prototype.length = function() {
+SA.Analysis.Model.prototype.length = function() {
   return this.fft.spectrum.length/2;
 }
 
-SpectrumAnalyzer.prototype.play = function(callback) {
+SA.Analysis.Model.prototype.play = function(callback) {
   var analyzer = this;
   this.audio.play(function() {
     analyzer.audio.connectProcessor(analyzer.analysis);
@@ -45,15 +45,15 @@ SpectrumAnalyzer.prototype.play = function(callback) {
   });
 }
 
-SpectrumAnalyzer.prototype.getInitialData = function() {
+SA.Analysis.Model.prototype.getInitialData = function() {
   var data = [];
-  for (var i = 0; i < this.length(); i++) { 
-    data.push(1); 
+  for (var i = 0; i < this.length(); i++) {
+    data.push(1);
   };
   return data;
 }
 
-SpectrumAnalyzer.prototype.withCurve = function(callback) {
+SA.Analysis.Model.prototype.withCurve = function(callback) {
   var segmentLength = this.length() / this.curve;
   var segmentCounter = 0;
   var segment = 0;
@@ -68,18 +68,18 @@ SpectrumAnalyzer.prototype.withCurve = function(callback) {
       segment += 1;
       segmentCounter = 0;
     }
-  }  
+  }
 }
 
-SpectrumAnalyzer.prototype.populateData = function(index, counter) {
+SA.Analysis.Model.prototype.populateData = function(index, counter) {
   amplitude = this.fft.spectrum[index] * (this.intensity * 200);
   this.delta[counter] = amplitude - this.data[counter];
   this.data[counter] = amplitude;
 }
 
-SpectrumAnalyzer.prototype.audioReceived = function(event) {
+SA.Analysis.Model.prototype.audioReceived = function(event) {
   var analyzer = this;
-  this.audio.routeAudio(event);   
+  this.audio.routeAudio(event);
   this.fft.forward(this.audio.mono);
   this.withCurve(function(index, counter) { analyzer.populateData(index, counter) });
 }
