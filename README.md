@@ -15,6 +15,8 @@ There is a config.ru file included so that you can serve the project locally usi
 
 `      cd d3-audio-spectrum`
 
+`      bundle install`
+
 `      rackup config.ru`
 
 * Open [http://localhost:9292](http://localhost:9292) in your browser
