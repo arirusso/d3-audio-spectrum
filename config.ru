@@ -5,8 +5,10 @@ require "uri"
 
 @root = File.dirname(__FILE__)
 
-use Rack::Static, :urls => ["/css", "/images", "/js", "/lib", "/media"], :root => "#{@root}/public"
-PAGES = %w{/index.html}
+DIRECTORIES = %w{/css /images /js /lib /media}.freeze
+PAGES = %w{/index.html}.freeze
+
+use Rack::Static, :urls => DIRECTORIES, :root => "#{@root}/public"
 
 def relay_audio(request)
   audio_url = request.params["src"]
@@ -26,15 +28,15 @@ end
 
 def render_audio(env)
   request = Rack::Request.new(env)
-  if !request.params["src"].nil?
+  if request.params["src"].nil?
+    not_found
+  else
     response = relay_audio(request)
     if response.code == "200" && (type = response["content-type"]) =~ /^audio\//
       [200, {"Content-Type" => type}, [response.body]]
     else
-      [404, {"Content-Type" => "text/html"}, ["not found"]]
+      not_found
     end
-  else
-    not_found
   end
 end
 
@@ -52,7 +54,7 @@ end
 
 app = Proc.new do |env|
   path = Rack::Utils.unescape(env["PATH_INFO"])
-  path = "/index.html" if path == "/"
+  path = PAGES.first if path == "/"
   if path == "/audio"
     render_audio(env)
   elsif PAGES.include?(path)
@@ -62,4 +64,4 @@ app = Proc.new do |env|
   end
 end
 
-run app
+run(app)
