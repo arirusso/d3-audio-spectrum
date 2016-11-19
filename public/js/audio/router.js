@@ -15,7 +15,7 @@ SA.Audio.Router.prototype.connectProcessor = function(processor) {
   processor.connect(this.context.destination);
 }
 
-SA.Audio.Router.prototype.setVolume = function(value) {
+SA.Audio.Router.prototype.setGain = function(value) {
   this.gain.gain.value = value;
 }
 

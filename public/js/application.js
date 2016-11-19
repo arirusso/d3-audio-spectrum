@@ -83,10 +83,10 @@ SA.Application.prototype.play = function() {
   });
 }
 
-SA.Application.prototype.setVolume = function(element) {
+SA.Application.prototype.setGain = function(element) {
   var fraction = parseInt(element.value) / parseInt(element.max);
   var value = fraction * fraction;
-  this.audio.setVolume(value);
+  this.audio.setGain(value);
 }
 
 SA.Application.prototype.setResolution = function(element) {
@@ -156,8 +156,8 @@ SA.Application.play = function() {
   this.instance.play();
 }
 
-SA.Application.setVolume = function(element) {
-  this.instance.setVolume(element);
+SA.Application.setGain = function(element) {
+  this.instance.setGain(element);
 }
 
 SA.Application.setIntensity = function(element) {
