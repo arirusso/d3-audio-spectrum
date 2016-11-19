@@ -103,13 +103,13 @@ SA.Application.prototype.setCurve = function(element) {
   this.view.reset();
 }
 
-SA.Application.prototype.selectAudioFile = function() {
+SA.Application.prototype.setAudioSourceToFile = function() {
   var application = this;
   this.page.setInputSelectButtonText("Use Audio Input");
   this.source = this.sourceFromUrl(this.audioUrl);
 }
 
-SA.Application.prototype.selectAudioInput = function() {
+SA.Application.prototype.setAudioSourceToInput = function() {
   this.page.setInputSelectButtonText("Use Audio URL")
   this.source = this.sourceFromInput();
   this.onSourceLoaded();
@@ -119,9 +119,9 @@ SA.Application.prototype.selectAudioInput = function() {
 SA.Application.prototype.toggleAudioInput = function() {
   this.stop();
   if (this.source instanceof SA.Audio.RemoteFile) {
-    this.selectAudioInput();
+    this.setAudioSourceToInput();
   } else if (this.source instanceof SA.Audio.Input) {
-    this.selectAudioFile();
+    this.setAudioSourceToFile();
   }
 }
 
