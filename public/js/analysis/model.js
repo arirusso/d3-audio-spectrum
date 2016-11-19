@@ -8,7 +8,7 @@ SA.Analysis.Model = function(audio) {
 }
 
 SA.Analysis.Model.prototype.setResolution = function(n) {
-  this.resolution = this.linLog(this.audio.bufferSize / n);
+  this.resolution = this._linLog(this.audio.bufferSize / n);
   this.reset();
 }
 
@@ -25,12 +25,8 @@ SA.Analysis.Model.prototype.reset = function() {
   this.fft = new FFT(fftSize, this.audio.sampleRate);
   var analyzer = this;
   this.analysis.onaudioprocess = function(event) {
-    analyzer.audioReceived(event);
+    analyzer._audioReceived(event);
   };
-}
-
-SA.Analysis.Model.prototype.linLog = function(n) {
-  return Math.pow( 2, Math.round( Math.log( n ) / Math.log( 2 ) ) );
 }
 
 SA.Analysis.Model.prototype.length = function() {
@@ -53,7 +49,14 @@ SA.Analysis.Model.prototype.getInitialData = function() {
   return data;
 }
 
-SA.Analysis.Model.prototype.withCurve = function(callback) {
+SA.Analysis.Model.prototype._linLog = function(n) {
+  return Math.pow( 2, Math.round( Math.log( n ) / Math.log( 2 ) ) );
+}
+
+/*
+  Execute the given callback using the current analyzer response curve
+*/
+SA.Analysis.Model.prototype._withCurve = function(callback) {
   var segmentLength = this.length() / this.curve;
   var segmentCounter = 0;
   var segment = 0;
@@ -71,15 +74,24 @@ SA.Analysis.Model.prototype.withCurve = function(callback) {
   }
 }
 
-SA.Analysis.Model.prototype.populateData = function(index, counter) {
+/*
+  Populate the graph data using the current audio frames
+*/
+SA.Analysis.Model.prototype._populateData = function(index, counter) {
   amplitude = this.fft.spectrum[index] * (this.intensity * 200);
   this.delta[counter] = amplitude - this.data[counter];
   this.data[counter] = amplitude;
 }
 
-SA.Analysis.Model.prototype.audioReceived = function(event) {
-  var analyzer = this;
+/*
+  Method that is called when a new audio frame is available
+*/
+SA.Analysis.Model.prototype._audioReceived = function(event) {
   this.audio.routeAudio(event);
   this.fft.forward(this.audio.mono);
-  this.withCurve(function(index, counter) { analyzer.populateData(index, counter) });
+
+  var analyzer = this;
+  this._withCurve(function(index, counter) {
+    analyzer._populateData(index, counter)
+  });
 }
