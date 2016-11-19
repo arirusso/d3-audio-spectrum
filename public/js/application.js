@@ -2,25 +2,183 @@ SA = function() {}
 
 SA.Application = function() {
   this.audio;
-  this.context;
   this.model;
   this.source;
   this.view;
   this.page = new SA.Page();
-  this.populateAudioUrl("media/sweep.mp3");
+  this._populateAudioUrl("media/sweep.mp3");
 }
 
-SA.Application.prototype.populateAudioUrl = function(defaultUrl) {
-  var src = this.query().src;
+/*
+  Load the audio file and configure the analyzer
+*/
+SA.Application.prototype.initialize = function() {
+  var app = this;
+  this.audio = new SA.Audio.Router();
+  this.source = this._getAudioFile(this.audioUrl, function() {
+    app.model = new SA.Analysis.Model(app.audio);
+    app.view = new SA.Analysis.View(app.model, "#spectrumAnalyzer");
+    app.view.update();
+  });
+  return true;
+}
+
+/*
+  Activate audio playback
+*/
+SA.Application.prototype.play = function() {
+  this.page.showWidgetSpinner();
+  this.page.setPlayState(true);
+  var application = this;
+  this.model.play(function() {
+    application.page.hideWidgetSpinner();
+  });
+}
+
+/*
+  Sets the audio gain.  The analysis gain is not compensated so this
+  adjustment will be reflected in the graph
+
+  Typical values are 0-100, default is 100
+*/
+SA.Application.prototype.setGain = function(element) {
+  var fraction = parseInt(element.value) / parseInt(element.max);
+  var value = fraction * fraction;
+  this.audio.setGain(value);
+}
+
+/*
+  Sets the resolution of the analysis
+
+  Typical values are 1-48, default is 48
+*/
+SA.Application.prototype.setResolution = function(element) {
+  this.model.setResolution(48 / element.value);
+  this.view.reset();
+}
+
+/*
+  Sets the depth of the analysis
+
+  Typical values are 0-100, default is 50
+*/
+SA.Application.prototype.setIntensity = function(element) {
+  this.model.intensity = Number(element.value);
+}
+
+/*
+  Sets the shape (log/lin) of the analysis graph
+
+  Typical values are 1-64, default is 8
+*/
+SA.Application.prototype.setCurve = function(element) {
+  this.model.setCurve(element.value);
+  this.view.reset();
+}
+
+/*
+  Sets the audio source to the local file or remote URL depending on
+  which has been chosen
+*/
+SA.Application.prototype.setAudioSourceToFile = function() {
+  var application = this;
+  this.page.setInputSelectButtonText("Use Audio Input");
+  this.source = this._getAudioFile(this.audioUrl);
+  return this.source;
+}
+
+/*
+  Sets the audio source to the audio input (eg microphone)
+*/
+SA.Application.prototype.setAudioSourceToInput = function() {
+  this.page.setInputSelectButtonText("Use Audio URL")
+  this.source = this._getAudioInput();
+  this._handleSourceLoaded();
+  this.play();
+  return this.source;
+}
+
+/*
+  Toggles the audio source from the audio input (eg microphone) to an audio file
+  or vice versa
+*/
+SA.Application.prototype.toggleAudioSource = function() {
+  this.stop();
+  if (this.source instanceof SA.Audio.RemoteFile) {
+    this.setAudioSourceToInput();
+  } else if (this.source instanceof SA.Audio.Input) {
+    this.setAudioSourceToFile();
+  }
+  return this.source;
+}
+
+/*
+  Toggles audio playback
+*/
+SA.Application.prototype.togglePlay = function() {
+  this.audio.isPlaying ? this.stop() : this.play();
+  return this.audio.isPlaying;
+}
+
+/*
+  Stops audio playback
+*/
+SA.Application.prototype.stop = function() {
+  this.audio.stop();
+  this.page.setPlayState(false);
+}
+
+/*
+  Requests and returns the audio file from the given URL.  The given callback
+  is fired when the request is complete
+*/
+SA.Application.prototype._getAudioFile = function(url, callback) {
+  var app = this;
+  return new SA.Audio.RemoteFile(this.audio.context, url, function() {
+    app._handleSourceLoaded(callback);
+  });
+}
+
+/*
+  Gets an Audio.Input instance that reflects the application state
+*/
+SA.Application.prototype._getAudioInput = function() {
+  return new SA.Audio.Input(this.audio.context);
+}
+
+/*
+  Populates the page with an audio URL if there is one in the HTTP request params.
+  If there isn't, the URL is given the passed in value
+*/
+SA.Application.prototype._populateAudioUrl = function(defaultUrl) {
+  var src = this._getRequestParams().src;
   if (src !== undefined && src !== null && src != "") {
-    this.audioUrl = "/audio?src=" + this.query().src;
+    this.audioUrl = "/audio?src=" + this._getRequestParams().src;
     this.page.setUrlInputValue(unescape(src));
   } else {
     this.audioUrl = defaultUrl;
   }
+  return this.audioUrl;
 }
 
-SA.Application.prototype.query = function () {
+/*
+  Method that is executed when the audio source is finished initializing
+*/
+SA.Application.prototype._handleSourceLoaded = function(callback) {
+  this.page.hideAudioSpinner();
+  this.page.showAnalyzer();
+  this.page.showControls();
+  this.audio.source = this.source;
+  if (callback !== undefined && callback !== null) {
+    callback();
+  }
+  return this.source;
+}
+
+/*
+  Gets the audio URL from the HTTP request URL params
+*/
+SA.Application.prototype._getRequestParams = function () {
   var query_string = {};
   var query = window.location.search.substring(1);
   var vars = query.split("&");
@@ -41,145 +199,87 @@ SA.Application.prototype.query = function () {
   return query_string;
 }
 
-SA.Application.prototype.load = function() {
-  var app = this;
-  this.populateContext();
-  this.audio = new SA.Audio.Router(this.context);
-  this.source = this.sourceFromUrl(this.audioUrl, function() {
-    app.model = new SA.Analysis.Model(app.audio);
-    app.view = new SA.Analysis.View(app.model, "#spectrumAnalyzer");
-    app.view.update();
-  });
-}
-
-SA.Application.prototype.sourceFromUrl = function(url, callback) {
-  var app = this;
-  return new SA.Audio.RemoteFile(this.context, url, function() {
-    app.onSourceLoaded(callback);
-  });
-}
-
-SA.Application.prototype.sourceFromInput = function() {
-  var app = this;
-  return new SA.Audio.Input(this.context);
-}
-
-SA.Application.prototype.onSourceLoaded = function(callback) {
-  this.page.hideAudioSpinner();
-  this.page.showAnalyzer();
-  this.page.showControls();
-  this.audio.source = this.source;
-  if (callback !== undefined && callback !== null) {
-    callback();
-  }
-}
-
-SA.Application.prototype.play = function() {
-  this.page.showWidgetSpinner();
-  this.page.setPlayState(true);
-  var application = this;
-  this.model.play(function() {
-    application.page.hideWidgetSpinner();
-  });
-}
-
-SA.Application.prototype.setGain = function(element) {
-  var fraction = parseInt(element.value) / parseInt(element.max);
-  var value = fraction * fraction;
-  this.audio.setGain(value);
-}
-
-SA.Application.prototype.setResolution = function(element) {
-  this.model.setResolution(48 / element.value);
-  this.view.reset();
-}
-
-SA.Application.prototype.setIntensity = function(element) {
-  this.model.intensity = Number(element.value);
-}
-
-SA.Application.prototype.setCurve = function(element) {
-  this.model.setCurve(element.value);
-  this.view.reset();
-}
-
-SA.Application.prototype.setAudioSourceToFile = function() {
-  var application = this;
-  this.page.setInputSelectButtonText("Use Audio Input");
-  this.source = this.sourceFromUrl(this.audioUrl);
-}
-
-SA.Application.prototype.setAudioSourceToInput = function() {
-  this.page.setInputSelectButtonText("Use Audio URL")
-  this.source = this.sourceFromInput();
-  this.onSourceLoaded();
-  this.play();
-}
-
-SA.Application.prototype.toggleAudioInput = function() {
-  this.stop();
-  if (this.source instanceof SA.Audio.RemoteFile) {
-    this.setAudioSourceToInput();
-  } else if (this.source instanceof SA.Audio.Input) {
-    this.setAudioSourceToFile();
-  }
-}
-
-SA.Application.prototype.togglePlay = function() {
-  this.audio.playing ? this.stop() : this.play();
-}
-
-SA.Application.prototype.stop = function() {
-  this.audio.stop();
-  this.page.setPlayState(false);
-}
-
-SA.Application.prototype.populateContext = function() {
-  if (typeof AudioContext !== "undefined") {
-    this.context = new AudioContext();
-  } else if (typeof webkitAudioContext !== "undefined") {
-    window.AudioContext = window.webkitAudioContext;
-  } else {
-    throw new Error("AudioContext not supported.");
-  }
-  this.context = new AudioContext();
-}
-
 // Class Methods
 
-SA.Application.load = function() {
+/*
+  Load the audio file and configure the analyzer
+*/
+SA.Application.initialize = function() {
   this.instance = new SA.Application();
-  this.instance.load();
+  this.instance.initialize();
+  return this.instance;
 }
 
+/*
+  Activate audio playback
+*/
 SA.Application.play = function() {
   this.instance.play();
+  return this.instance;
 }
 
+/*
+  Sets the audio gain.  The analysis gain is not compensated so this
+  adjustment will be reflected in the graph
+
+  Typical values are 0-100, default is 100
+*/
 SA.Application.setGain = function(element) {
   this.instance.setGain(element);
+  return this.instance;
 }
 
+/*
+  Sets the depth of the analysis
+
+  Typical values are 0-100, default is 50
+*/
 SA.Application.setIntensity = function(element) {
   this.instance.setIntensity(element);
+  return this.instance;
 }
 
+/*
+  Sets the resolution of the analysis
+
+  Typical values are 1-48, default is 48
+*/
 SA.Application.setResolution = function(element) {
   this.instance.setResolution(element);
+  return this.instance;
 }
 
+/*
+  Sets the shape (log/lin) of the analysis graph
+
+  Typical values are 1-64, default is 8
+*/
 SA.Application.setCurve = function(element) {
   this.instance.setCurve(element);
+  return this.instance;
 }
 
-SA.Application.toggleAudioInput = function() {
-  this.instance.toggleAudioInput();
+/*
+  Toggles the audio source from the audio input (eg microphone) to an audio file
+  or vice versa
+*/
+SA.Application.toggleAudioSource = function() {
+  this.instance.toggleAudioSource();
+  return this.instance;
 }
 
+/*
+  Toggles audio playback
+*/
 SA.Application.togglePlay = function() {
   this.instance.togglePlay();
+  return this.instance;
 }
 
+/*
+  Stops audio playback
+*/
 SA.Application.stop = function() {
   this.instance.stop();
+  return this.instance;
 }

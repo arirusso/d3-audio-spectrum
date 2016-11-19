@@ -1,7 +1,7 @@
-SA.Audio.Router = function(context, sampleRate) {
-  this.context = context;
+SA.Audio.Router = function(sampleRate) {
+  this._populateContext();
   this.sampleRate = sampleRate || 44100;
-  this.playing = false;
+  this.isPlaying = false;
   this.bufferSize = 2048;
 }
 
@@ -21,7 +21,7 @@ SA.Audio.Router.prototype.setGain = function(value) {
 
 SA.Audio.Router.prototype.stop = function() {
   this.source.stop();
-  this.playing = false;
+  this.isPlaying = false;
 }
 
 SA.Audio.Router.prototype.play = function(callback) {
@@ -34,7 +34,7 @@ SA.Audio.Router.prototype.play = function(callback) {
 SA.Audio.Router.prototype.onSourceLoad = function(callback) {
   this.connect();
   this.source.play();
-  this.playing = true;
+  this.isPlaying = true;
   callback();
 }
 
@@ -53,4 +53,19 @@ SA.Audio.Router.prototype.routeAudio = function(event) {
     output.r[i] = input.r[i];
     this.mono[i] = (input.l[i] + input.r[i]) / 2;
   }
+}
+
+/*
+  Populates the Web Audio context
+*/
+SA.Audio.Router.prototype._populateContext = function() {
+  if (typeof AudioContext !== "undefined") {
+    this.context = new AudioContext();
+  } else if (typeof webkitAudioContext !== "undefined") {
+    window.AudioContext = window.webkitAudioContext;
+  } else {
+    throw new Error("AudioContext not supported.");
+  }
+  this.context = new AudioContext();
+  return this.context;
 }
