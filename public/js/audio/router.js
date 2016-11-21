@@ -27,15 +27,8 @@ SA.Audio.Router.prototype.stop = function() {
 SA.Audio.Router.prototype.play = function(callback) {
   var audio = this;
   this.source.load(function() {
-    audio.onSourceLoad(callback);
+    audio._onSourceLoad(callback);
   });
-}
-
-SA.Audio.Router.prototype.onSourceLoad = function(callback) {
-  this.connect();
-  this.source.play();
-  this.isPlaying = true;
-  callback();
 }
 
 SA.Audio.Router.prototype.routeAudio = function(event) {
@@ -53,6 +46,15 @@ SA.Audio.Router.prototype.routeAudio = function(event) {
     output.r[i] = input.r[i];
     this.mono[i] = (input.l[i] + input.r[i]) / 2;
   }
+}
+
+SA.Audio.Router.prototype._onSourceLoad = function(callback) {
+  this.connect();
+  if (this.source.play !== undefined && this.source.play !== null) {
+    this.source.play();
+  }
+  this.isPlaying = true;
+  callback();
 }
 
 /*
