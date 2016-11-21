@@ -15,7 +15,7 @@ SA.Application = function() {
 SA.Application.prototype.initialize = function() {
   var app = this;
   this.audio = new SA.Audio.Router();
-  this.source = this._getAudioFile(this.audioUrl, function() {
+  this.source = this._getAudioURL(this.audioUrl, function() {
     app.model = new SA.Analysis.Model(app.audio);
     app.view = new SA.Analysis.View(app.model, "#spectrumAnalyzer");
     app.view.update();
@@ -77,13 +77,13 @@ SA.Application.prototype.setCurve = function(element) {
 }
 
 /*
-  Sets the audio source to the local file or remote URL depending on
+  Sets the audio source to the local or remote URL depending on
   which has been chosen
 */
 SA.Application.prototype.setAudioSourceToFile = function() {
   var application = this;
   this.page.setInputSelectButtonText("Use Audio Input");
-  this.source = this._getAudioFile(this.audioUrl);
+  this.source = this._getAudioURL(this.audioUrl);
   return this.source;
 }
 
@@ -104,9 +104,9 @@ SA.Application.prototype.setAudioSourceToInput = function() {
 */
 SA.Application.prototype.toggleAudioSource = function() {
   this.stop();
-  if (this.source instanceof SA.Audio.RemoteFile) {
+  if (this.source instanceof SA.Audio.Source.URL) {
     this.setAudioSourceToInput();
-  } else if (this.source instanceof SA.Audio.Input) {
+  } else if (this.source instanceof SA.Audio.Source.Device) {
     this.setAudioSourceToFile();
   }
   return this.source;
@@ -132,9 +132,9 @@ SA.Application.prototype.stop = function() {
   Requests and returns the audio file from the given URL.  The given callback
   is fired when the request is complete
 */
-SA.Application.prototype._getAudioFile = function(url, callback) {
+SA.Application.prototype._getAudioURL = function(url, callback) {
   var app = this;
-  return new SA.Audio.RemoteFile(this.audio.context, url, function() {
+  return new SA.Audio.Source.URL(this.audio.context, url, function() {
     app._handleSourceLoaded(callback);
   });
 }
@@ -143,7 +143,7 @@ SA.Application.prototype._getAudioFile = function(url, callback) {
   Gets an Audio.Input instance that reflects the application state
 */
 SA.Application.prototype._getAudioInput = function() {
-  return new SA.Audio.Input(this.audio.context);
+  return new SA.Audio.Source.Device(this.audio.context);
 }
 
 /*
