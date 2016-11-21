@@ -6,10 +6,7 @@ This is a spectrum analyzer demo that I did for fun using the HTML5 Web Audio AP
 
 ## Local Installation
 
-There is a config.ru file included so that you can serve the project locally using [Rack](http://rack.github.com)
-
-* Make sure rack is installed
-* Clone the git repo
+There is a config.ru file included so that you can serve the project locally using [Rack](http://rack.github.com) assuming you have Ruby installed
 
 `      git clone git@github.com:arirusso/d3-audio-spectrum.git`
 
