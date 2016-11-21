@@ -1,3 +1,6 @@
+/*
+  An audio file that is available by HTTP for analysis
+*/
 SA.Audio.Source.URL = function(context, url, callback) {
   this.context = context
   this.url = url;
@@ -19,12 +22,18 @@ SA.Audio.Source.URL.prototype.load = function(callback) {
   request.send();
 }
 
+/*
+  Method that is called when the analyzer begins playing the file from the URL
+*/
 SA.Audio.Source.URL.prototype.play = function() {
   this.isPlaying = true;
   this.source.loop = true;
   this.source.start(0);
 }
 
+/*
+  Method that is called when the analyzer stops playing the file from the URL
+*/
 SA.Audio.Source.URL.prototype.stop = function() {
   if (this.isPlaying) {
     this.source.stop(0);

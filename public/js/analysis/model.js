@@ -1,4 +1,6 @@
-// This is where the audio is analyzed
+/*
+  This is where the audio data is modeled for analysis
+*/
 SA.Analysis.Model = function(audio) {
   this.audio = audio;
   this.analysis = this.audio.context.createScriptProcessor(this.audio.bufferSize);

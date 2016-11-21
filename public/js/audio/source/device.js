@@ -1,3 +1,6 @@
+/*
+  Audio input device used to collect data for analysis
+*/
 SA.Audio.Source.Device = function(context) {
   this.context = context;
 }
