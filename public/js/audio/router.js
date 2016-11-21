@@ -15,15 +15,24 @@ SA.Audio.Router.prototype.connectProcessor = function(processor) {
   processor.connect(this.context.destination);
 }
 
+/*
+  Set the audio gain amount to the specified value
+*/
 SA.Audio.Router.prototype.setGain = function(value) {
   this.gain.gain.value = value;
 }
 
+/*
+  Stop audio playback and analysis
+*/
 SA.Audio.Router.prototype.stop = function() {
   this.source.stop();
   this.isPlaying = false;
 }
 
+/*
+  Start audio playback and analysis
+*/
 SA.Audio.Router.prototype.play = function(callback) {
   var audio = this;
   this.source.load(function() {
@@ -31,6 +40,10 @@ SA.Audio.Router.prototype.play = function(callback) {
   });
 }
 
+/*
+  Connect the audio source to both the spectrum analyzer modeler and the
+  browser audio output
+*/
 SA.Audio.Router.prototype.routeAudio = function(event) {
   var input = {
     l: event.inputBuffer.getChannelData(0),
@@ -48,6 +61,9 @@ SA.Audio.Router.prototype.routeAudio = function(event) {
   }
 }
 
+/*
+  Method to run when audio is finished loading for playback/analysis start
+*/
 SA.Audio.Router.prototype._onSourceLoad = function(callback) {
   this.connect();
   if (this.source.play !== undefined && this.source.play !== null) {
