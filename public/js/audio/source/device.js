@@ -17,14 +17,23 @@ SA.Audio.Source.Device.prototype.load = function(callback) {
   MediaStreamTrack.getSources(sourceCallback);
 }
 
+/*
+  Disconnect the audio input from the spectrum analyzer and audio outputs
+*/
 SA.Audio.Source.Device.prototype.stop = function() {
   this.disconnect();
 }
 
+/*
+  Connect the source resource to the gain node
+*/
 SA.Audio.Source.Device.prototype.connect = function(connector) {
   this.source.connect(connector);
 }
 
+/*
+  Disconnect the source resource from the gain node
+*/
 SA.Audio.Source.Device.prototype.disconnect = function() {
   this.source.disconnect();
 }

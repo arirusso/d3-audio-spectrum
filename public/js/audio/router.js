@@ -1,3 +1,6 @@
+/*
+  Connects the audio source to both audio playback and the analysis modeler
+*/
 SA.Audio.Router = function(sampleRate) {
   this._populateContext();
   this.sampleRate = sampleRate || 44100;
@@ -5,11 +8,10 @@ SA.Audio.Router = function(sampleRate) {
   this.bufferSize = 2048;
 }
 
-SA.Audio.Router.prototype.connect = function() {
-  this.gain = this.context.createGain();
-  this.source.connect(this.gain);
-}
-
+/*
+  Connect the spectrum analyzer widget to the gain node and the Web Audio
+  context
+*/
 SA.Audio.Router.prototype.connectProcessor = function(processor) {
   this.gain.connect(processor);
   processor.connect(this.context.destination);
@@ -62,10 +64,18 @@ SA.Audio.Router.prototype.routeAudio = function(event) {
 }
 
 /*
+  Create a gain node and connect it to the audio source
+*/
+SA.Audio.Router.prototype._initializeGain = function() {
+  this.gain = this.context.createGain();
+  this.source.connect(this.gain);
+}
+
+/*
   Method to run when audio is finished loading for playback/analysis start
 */
 SA.Audio.Router.prototype._onSourceLoad = function(callback) {
-  this.connect();
+  this._initializeGain();
   if (this.source.play !== undefined && this.source.play !== null) {
     this.source.play();
   }

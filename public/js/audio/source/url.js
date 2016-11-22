@@ -42,14 +42,23 @@ SA.Audio.Source.URL.prototype.stop = function() {
   this.isPlaying = false;
 }
 
+/*
+  Connect the source resource to the gain node
+*/
 SA.Audio.Source.URL.prototype.connect = function(connector) {
   this.source.connect(connector);
 }
 
+/*
+  Disconnect the source resource to the gain node
+*/
 SA.Audio.Source.URL.prototype.disconnect = function() {
   this.source.disconnect();
 }
 
+/*
+  Method that's called when the response is received from the remote server
+*/
 SA.Audio.Source.URL.prototype._decode = function(response, callback) {
   var file = this;
   this.source = this.context.createBufferSource();
