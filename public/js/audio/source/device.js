@@ -12,11 +12,13 @@ SA.Audio.Source.Device = function(context) {
 */
 SA.Audio.Source.Device.prototype.load = function(callback) {
   SA.Audio.Source.Device._ensureUserMediaIsInitialized();
+
   var input = this;
-  var sourceCallback = function(sourceInfos) {
-    input._sourceLoadedCallback(sourceInfos, callback);
+  var sourcesLoadedCallback = function(sourceInfos) {
+    input._sourcesLoadedCallback(sourceInfos, callback);
   }
-  MediaStreamTrack.getSources(sourceCallback);
+
+  MediaStreamTrack.getSources(sourcesLoadedCallback);
 }
 
 /*
@@ -45,25 +47,31 @@ SA.Audio.Source.Device.prototype.disconnect = function() {
 */
 SA.Audio.Source.Device.prototype._initializeSource = function(sourceInfo, callback) {
   var args = SA.Audio.Source.Device._getSystemArgs(sourceInfo);
+
   var errorCallback = function(error) {
     console.log(error);
   }
-  navigator.getUserMedia(args, this._getStreamLoadedCallback(callback), errorCallback);
-}
 
-SA.Audio.Source.Device.prototype._getStreamLoadedCallback = function(callback) {
-  var input = this;
-  return function(stream) {
+  var input = this
+  var streamLoadedCallback = function(stream) {
     input._streamLoadedCallback(stream, callback);
   }
+
+  navigator.getUserMedia(args, streamLoadedCallback, errorCallback);
 }
 
+/*
+  Callback that's fired when the audio input stream has finished loading
+*/
 SA.Audio.Source.Device.prototype._streamLoadedCallback = function(stream, callback) {
   this._source = this._context.createMediaStreamSource(stream, callback);
   callback();
 }
 
-SA.Audio.Source.Device.prototype._sourceLoadedCallback = function(sourceInfos, callback) {
+/*
+  Callback that's fired when the audio input device resources have finished loading
+*/
+SA.Audio.Source.Device.prototype._sourcesLoadedCallback = function(sourceInfos, callback) {
   for (var i = 0; i != sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
     if (sourceInfo.kind === "audio") {
