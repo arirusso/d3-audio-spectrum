@@ -22,7 +22,7 @@ SA.Application.prototype.initialize = function() {
   this.audio = new SA.Audio.Router();
   this.audio.source = this._getAudioURL(this.audioUrl, function() {
     app.model = new SA.Analysis.Model(app.audio);
-    app.view = new SA.Analysis.View(app.model, "#spectrumAnalyzer");
+    app.view = new SA.Analysis.View(app.model, app.page.getAnalyzerElement());
     app.view.update();
   });
   return true;

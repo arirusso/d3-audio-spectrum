@@ -1,7 +1,7 @@
 /*
   The spectrum analyzer d3 chart visual layer
 */
-SA.Analysis.View = function(model, selector) {
+SA.Analysis.View = function(model, element) {
   this._amplitude;
   this._chart;
   this._color;
@@ -10,9 +10,9 @@ SA.Analysis.View = function(model, selector) {
   this._y;
 
   this._model = model;
-  this._selector = selector;
+  this._element = element;
   this._height = 500;
-  this._elementWidth = document.getElementsByTagName("div")["spectrumAnalyzer"].offsetWidth - 2;
+  this._elementWidth = this._element.offsetWidth - 2;
   this._initialize();
 }
 
@@ -94,7 +94,7 @@ SA.Analysis.View.prototype._barWidth = function() {
 SA.Analysis.View.prototype._createChart = function() {
   var data = this._model.getInitialData();
 
-  this._chart = d3.select(this._selector).append("svg")
+  this._chart = d3.select(this._element).append("svg")
     .attr("class", "chart")
     .attr("width", this._barWidth() * data.length)
     .attr("height", this._height);

@@ -11,10 +11,17 @@ SA.Page.prototype.showControls = function() {
 }
 
 /*
+  Get the spectrum analyzer dom element
+*/
+SA.Page.prototype.getAnalyzerElement = function() {
+  return document.getElementById("spectrumAnalyzer");
+}
+
+/*
   Display the spectrum analyzer on the page
 */
 SA.Page.prototype.showAnalyzer = function() {
-  document.getElementById("spectrumAnalyzer").style.display = "block";
+  this.getAnalyzerElement().style.display = "block";
 }
 
 /*
