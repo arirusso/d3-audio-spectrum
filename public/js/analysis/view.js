@@ -1,82 +1,102 @@
 SA.Analysis.View = function(model, selector) {
-  this.model = model;
-  this.selector = selector;
-  this.height = 500;
-  this.elementWidth = (document.getElementsByTagName("div")["spectrumAnalyzer"].offsetWidth - 2)
-  this.initialize();
+  this._model = model;
+  this._selector = selector;
+  this._height = 500;
+  this._elementWidth = document.getElementsByTagName("div")["spectrumAnalyzer"].offsetWidth - 2;
+  this._initialize();
 }
 
-SA.Analysis.View.prototype.initialize = function() {
+/*
+  Reinitialize the view completely, such as when resolution is changed
+*/
+SA.Analysis.View.prototype.reset = function() {
+  d3.select("svg").remove();
+  this._createChart();
+  this._initializeChart();
+}
+
+SA.Analysis.View.prototype.update = function() {
+  var view = this;
+  var data = this._model.data;
+
+  this._chart.selectAll("rect")
+    .data(data)
+    .attr("fill", function(d) {
+      return view._color(d);
+    })
+    .attr("x", function(d, i) {
+      return view._x(i);
+    })
+    .attr("y", function(d) {
+      return view._height - view._y(d);
+    })
+    .attr("width", this._barWidth())
+    .attr("height", function(d) {
+      return view._amplitude(d);
+    });
+
+  this._enqueueNextUpdate();
+}
+
+SA.Analysis.View.prototype._initialize = function() {
   this._y = d3.scaleLinear()
-    .domain([0, this.height])
-    .rangeRound([0, this.height]);
-  this.color = d3.scaleLinear()
+    .domain([0, this._height])
+    .rangeRound([0, this._height]);
+  this._color = d3.scaleLinear()
     .domain([0, 500])
     .range(["blue", "red"]);
-  this.amplitude = d3.scaleLinear()
+  this._amplitude = d3.scaleLinear()
     .domain([0,10])
     .range([0,500]);
-  this.createChart();
-  this.initializeChart();
+  this._createChart();
+  this._initializeChart();
 }
 
 SA.Analysis.View.prototype._x = function(n) {
   return d3.scaleLinear()
     .domain([0, 1])
-    .range([0, this.barWidth()])(n);
+    .range([0, this._barWidth()])(n);
 }
 
-SA.Analysis.View.prototype.barWidth = function() {
-  var dataLength = Math.min(this.model.length(), (this.model.data.length || this.model.getInitialData().length));
-  return this.elementWidth / dataLength;
+SA.Analysis.View.prototype._barWidth = function() {
+  var length = this._model.data.length || this._model.getInitialData().length;
+  var dataLength = Math.min(this._model.length(), length);
+  return this._elementWidth / dataLength;
 }
 
-SA.Analysis.View.prototype.createChart = function() {
-  var data = this.model.getInitialData();
+SA.Analysis.View.prototype._createChart = function() {
+  var data = this._model.getInitialData();
 
-  this.chart = d3.select(this.selector).append("svg")
+  this._chart = d3.select(this._selector).append("svg")
     .attr("class", "chart")
-    .attr("width", this.barWidth() * data.length)
-    .attr("height", this.height);
+    .attr("width", this._barWidth() * data.length)
+    .attr("height", this._height);
 }
 
-SA.Analysis.View.prototype.reset = function() {
-  d3.select("svg").remove();
-  this.createChart();
-  this.initializeChart();
-}
-
-SA.Analysis.View.prototype.initializeChart = function() {
+SA.Analysis.View.prototype._initializeChart = function() {
   var view = this;
-  var data = this.model.getInitialData();
+  var data = this._model.getInitialData();
 
-  this.chart.selectAll("rect")
+  this._chart.selectAll("rect")
     .data(data)
     .enter().append("rect")
     .attr("fill", "#FFF")
-    .attr("x", function(d, i) { return view._x(i) - .5; })
-    .attr("y", function(d) { return view.height - view._y(d) - .5; })
-    .attr("width", this.barWidth())
-    .attr("height", function(d) { return 0; } );
+    .attr("x", function(d, i) {
+      return view._x(i) - .5;
+    })
+    .attr("y", function(d) {
+      return view._height - view._y(d) - .5;
+    })
+    .attr("width", this._barWidth())
+    .attr("height", function(d) {
+      return 0;
+    });
 }
 
-SA.Analysis.View.prototype.update = function() {
+SA.Analysis.View.prototype._enqueueNextUpdate = function() {
   var view = this;
-  var data = this.model.data;
-
-  this.chart.selectAll("rect")
-    .data(data)
-    .attr("fill", function(d) { return view.color(d); })
-    .attr("x", function(d, i) { return view._x(i); })
-    .attr("y", function(d) { return view.height - view._y(d); })
-    .attr("width", this.barWidth())
-    .attr("height", function(d) { return view.amplitude(d); } );
-
-  this.enqueueNextUpdate()
-}
-
-SA.Analysis.View.prototype.enqueueNextUpdate = function() {
-  var view = this;
-  timeout = setTimeout(function() { view.update() }, 50);
+  timeout = setTimeout(function() {
+    view.update()
+  }, 50);
   return timeout;
 }
