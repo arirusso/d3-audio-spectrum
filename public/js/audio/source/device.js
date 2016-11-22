@@ -79,7 +79,7 @@ SA.Audio.Source.Device._getUserMedia = function() {
 
 SA.Audio.Source.Device._ensureUserMediaIsInitialized = function() {
   if (navigator.getUserMedia == null) {
-    navigator.getUserMedia = AudioInput._getUserMedia();
+    navigator.getUserMedia = SA.Audio.Source.Device._getUserMedia();
   }
 }
 
