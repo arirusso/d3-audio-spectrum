@@ -1,5 +1,11 @@
+/*
+  Spectrum analyzer namespace
+*/
 SA = function() {}
 
+/*
+  Spectrum analyzer application
+*/
 SA.Application = function() {
   this.audio;
   this.model;

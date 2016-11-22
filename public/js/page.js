@@ -1,3 +1,6 @@
+/*
+  Web page where the spectrum analyzer is run
+*/
 SA.Page = function() {}
 
 /*

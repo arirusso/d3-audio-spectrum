@@ -1,3 +1,6 @@
+/*
+  The spectrum analyzer d3 chart visual layer
+*/
 SA.Analysis.View = function(model, selector) {
   this._amplitude;
   this._chart;
