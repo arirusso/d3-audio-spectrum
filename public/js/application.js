@@ -3,7 +3,6 @@ SA = function() {}
 SA.Application = function() {
   this.audio;
   this.model;
-  this.source;
   this.view;
   this.page = new SA.Page();
   this._populateAudioUrl("media/sweep.mp3");
@@ -15,7 +14,7 @@ SA.Application = function() {
 SA.Application.prototype.initialize = function() {
   var app = this;
   this.audio = new SA.Audio.Router();
-  this.source = this._getAudioURL(this.audioUrl, function() {
+  this.audio.source = this._getAudioURL(this.audioUrl, function() {
     app.model = new SA.Analysis.Model(app.audio);
     app.view = new SA.Analysis.View(app.model, "#spectrumAnalyzer");
     app.view.update();
@@ -83,8 +82,8 @@ SA.Application.prototype.setCurve = function(element) {
 SA.Application.prototype.setAudioSourceToFile = function() {
   var application = this;
   this.page.setInputSelectButtonText("Use Audio Input");
-  this.source = this._getAudioURL(this.audioUrl);
-  return this.source;
+  this.audio.source = this._getAudioURL(this.audioUrl);
+  return this.audio.source;
 }
 
 /*
@@ -92,10 +91,10 @@ SA.Application.prototype.setAudioSourceToFile = function() {
 */
 SA.Application.prototype.setAudioSourceToInput = function() {
   this.page.setInputSelectButtonText("Use Audio URL")
-  this.source = this._getAudioInput();
+  this.audio.source = this._getAudioInput();
   this._handleSourceLoaded();
   this.play();
-  return this.source;
+  return this.audio.source;
 }
 
 /*
@@ -104,12 +103,12 @@ SA.Application.prototype.setAudioSourceToInput = function() {
 */
 SA.Application.prototype.toggleAudioSource = function() {
   this.stop();
-  if (this.source instanceof SA.Audio.Source.URL) {
+  if (this.audio.source instanceof SA.Audio.Source.URL) {
     this.setAudioSourceToInput();
-  } else if (this.source instanceof SA.Audio.Source.Device) {
+  } else if (this.audio.source instanceof SA.Audio.Source.Device) {
     this.setAudioSourceToFile();
   }
-  return this.source;
+  return this.audio.source;
 }
 
 /*
@@ -168,11 +167,10 @@ SA.Application.prototype._handleSourceLoaded = function(callback) {
   this.page.hideAudioSpinner();
   this.page.showAnalyzer();
   this.page.showControls();
-  this.audio.source = this.source;
   if (callback !== undefined && callback !== null) {
     callback();
   }
-  return this.source;
+  return this.audio.source;
 }
 
 /*

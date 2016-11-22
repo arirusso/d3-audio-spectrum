@@ -2,7 +2,9 @@
   An audio file that is available by HTTP for analysis
 */
 SA.Audio.Source.URL = function(context, url, callback) {
-  this.context = context
+  this._source;
+
+  this._context = context
   this.url = url;
   this.isPlaying = false;
   this.load(callback);
@@ -27,8 +29,8 @@ SA.Audio.Source.URL.prototype.load = function(callback) {
 */
 SA.Audio.Source.URL.prototype.play = function() {
   this.isPlaying = true;
-  this.source.loop = true;
-  this.source.start(0);
+  this._source.loop = true;
+  this._source.start(0);
 }
 
 /*
@@ -36,7 +38,7 @@ SA.Audio.Source.URL.prototype.play = function() {
 */
 SA.Audio.Source.URL.prototype.stop = function() {
   if (this.isPlaying) {
-    this.source.stop(0);
+    this._source.stop(0);
     this.disconnect();
   }
   this.isPlaying = false;
@@ -46,25 +48,26 @@ SA.Audio.Source.URL.prototype.stop = function() {
   Connect the source resource to the gain node
 */
 SA.Audio.Source.URL.prototype.connect = function(connector) {
-  this.source.connect(connector);
+  this._source.connect(connector);
 }
 
 /*
   Disconnect the source resource to the gain node
 */
 SA.Audio.Source.URL.prototype.disconnect = function() {
-  this.source.disconnect();
+  this._source.disconnect();
 }
 
 /*
   Method that's called when the response is received from the remote server
 */
 SA.Audio.Source.URL.prototype._decode = function(response, callback) {
-  var file = this;
-  this.source = this.context.createBufferSource();
-  this.context.decodeAudioData(response,
+  this._source = this._context.createBufferSource();
+
+  var url = this;
+  this._context.decodeAudioData(response,
     function(buffer) {
-      file.source.buffer = buffer;
+      url._source.buffer = buffer;
       callback();
     },
     function() { }

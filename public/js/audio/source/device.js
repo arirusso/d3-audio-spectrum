@@ -2,7 +2,9 @@
   Audio input device used to collect data for analysis
 */
 SA.Audio.Source.Device = function(context) {
-  this.context = context;
+  this._source;
+
+  this._context = context;
 }
 
 /*
@@ -28,14 +30,14 @@ SA.Audio.Source.Device.prototype.stop = function() {
   Connect the source resource to the gain node
 */
 SA.Audio.Source.Device.prototype.connect = function(connector) {
-  this.source.connect(connector);
+  this._source.connect(connector);
 }
 
 /*
   Disconnect the source resource from the gain node
 */
 SA.Audio.Source.Device.prototype.disconnect = function() {
-  this.source.disconnect();
+  this._source.disconnect();
 }
 
 /*
@@ -57,7 +59,7 @@ SA.Audio.Source.Device.prototype._getStreamLoadedCallback = function(callback) {
 }
 
 SA.Audio.Source.Device.prototype._streamLoadedCallback = function(stream, callback) {
-  this.source = this.context.createMediaStreamSource(stream, callback);
+  this._source = this._context.createMediaStreamSource(stream, callback);
   callback();
 }
 

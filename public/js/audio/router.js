@@ -2,10 +2,14 @@
   Connects the audio source to both audio playback and the analysis modeler
 */
 SA.Audio.Router = function(sampleRate) {
-  this._populateContext();
+  this._gain;
+  this.context;
+  this.source;
+
   this.sampleRate = sampleRate || 44100;
   this.isPlaying = false;
   this.bufferSize = 2048;
+  this._populateContext();
 }
 
 /*
@@ -13,7 +17,7 @@ SA.Audio.Router = function(sampleRate) {
   context
 */
 SA.Audio.Router.prototype.connectProcessor = function(processor) {
-  this.gain.connect(processor);
+  this._gain.connect(processor);
   processor.connect(this.context.destination);
 }
 
@@ -21,7 +25,7 @@ SA.Audio.Router.prototype.connectProcessor = function(processor) {
   Set the audio gain amount to the specified value
 */
 SA.Audio.Router.prototype.setGain = function(value) {
-  this.gain.gain.value = value;
+  this._gain.gain.value = value;
 }
 
 /*
@@ -36,9 +40,9 @@ SA.Audio.Router.prototype.stop = function() {
   Start audio playback and analysis
 */
 SA.Audio.Router.prototype.play = function(callback) {
-  var audio = this;
+  var router = this;
   this.source.load(function() {
-    audio._onSourceLoad(callback);
+    router._onSourceLoad(callback);
   });
 }
 
@@ -67,8 +71,8 @@ SA.Audio.Router.prototype.routeAudio = function(event) {
   Create a gain node and connect it to the audio source
 */
 SA.Audio.Router.prototype._initializeGain = function() {
-  this.gain = this.context.createGain();
-  this.source.connect(this.gain);
+  this._gain = this.context.createGain();
+  this.source.connect(this._gain);
 }
 
 /*
