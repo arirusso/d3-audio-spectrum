@@ -67,7 +67,7 @@ SA.Analysis.View.prototype._x = function(n) {
 
 SA.Analysis.View.prototype._barWidth = function() {
   var length = this._model.data.length || this._model.getInitialData().length;
-  var dataLength = Math.min(this._model.length(), length);
+  var dataLength = Math.min(this._model.getLength(), length);
   return this._elementWidth / dataLength;
 }
 

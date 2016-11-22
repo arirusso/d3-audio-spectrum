@@ -2,10 +2,11 @@
   This is where the audio data is modeled for analysis
 */
 SA.Analysis.Model = function(audio) {
-  this._data;
   this._delta;
   this._fft;
   this._resolution;
+
+  this.data;
 
   this._audio = audio;
   this._analysis = this._audio.context.createScriptProcessor(this._audio.bufferSize);
@@ -14,62 +15,81 @@ SA.Analysis.Model = function(audio) {
   this.setResolution(1);
 }
 
+/*
+  Set the resolution of the analysis
+*/
 SA.Analysis.Model.prototype.setResolution = function(n) {
-  this._resolution = this._linLog(this._audio.bufferSize / n);
+  this._resolution = this._upperPowerOfTwo(this._audio.bufferSize / n);
   this.reset();
 }
 
+/*
+  Set the lin/log curve amount of the analysis
+*/
 SA.Analysis.Model.prototype.setCurve = function(n) {
   this._curve = n;
   this.reset();
 }
 
+/*
+  Reset the analyzer model
+*/
 SA.Analysis.Model.prototype.reset = function() {
-  this._data = [];
+  this.data = [];
   this._delta = [];
   var fftSize = this._resolution;
   this._audio.mono = new Float32Array(fftSize);
   this._fft = new FFT(fftSize, this._audio.sampleRate);
+
   var analyzer = this;
   this._analysis.onaudioprocess = function(event) {
     analyzer._audioReceived(event);
   };
 }
 
-SA.Analysis.Model.prototype.length = function() {
-  return this._fft.spectrum.length/2;
+/*
+  Get the number of frequency bands of the underlying model
+*/
+SA.Analysis.Model.prototype.getLength = function() {
+  return this._fft.spectrum.length / 2;
 }
 
+/*
+  Start analysis on the audio
+*/
 SA.Analysis.Model.prototype.play = function(callback) {
   var analyzer = this;
   this._audio.play(function() {
-    analyzer._audio.connectProcessor(analyzer.analysis);
+    analyzer._audio.connectProcessor(analyzer._analysis);
     callback();
   });
 }
 
 SA.Analysis.Model.prototype.getInitialData = function() {
   var data = [];
-  for (var i = 0; i < this.length(); i++) {
+  for (var i = 0; i < this.getLength(); i++) {
     data.push(1);
   };
   return data;
 }
 
-SA.Analysis.Model.prototype._linLog = function(n) {
-  return Math.pow( 2, Math.round( Math.log( n ) / Math.log( 2 ) ) );
+/*
+  Resolution should be a power of two, this method calculates that
+*/
+SA.Analysis.Model.prototype._upperPowerOfTwo = function(n) {
+  return Math.pow(2, Math.round(Math.log(n) / Math.log(2)));
 }
 
 /*
   Execute the given callback using the current analyzer response curve
 */
 SA.Analysis.Model.prototype._withCurve = function(callback) {
-  var segmentLength = this.length() / this._curve;
+  var segmentLength = this.getLength() / this._curve;
   var segmentCounter = 0;
   var segment = 0;
   var counter = 0;
   var index = 0;
-  while (index <= this.length() - 1) {
+  while (index <= this.getLength() - 1) {
     callback(index, counter);
     index += (segment * this._curve) + 1;
     counter += 1;
@@ -86,8 +106,8 @@ SA.Analysis.Model.prototype._withCurve = function(callback) {
 */
 SA.Analysis.Model.prototype._populateData = function(index, counter) {
   amplitude = this._fft.spectrum[index] * (this._intensity * 200);
-  this._delta[counter] = amplitude - this._data[counter];
-  this._data[counter] = amplitude;
+  this._delta[counter] = amplitude - this.data[counter];
+  this.data[counter] = amplitude;
 }
 
 /*
