@@ -65,12 +65,12 @@ SA.Analysis.Model.prototype.play = function(callback) {
   });
 }
 
+/*
+  Get an array that is the size of the data model, filled with zeros
+*/
 SA.Analysis.Model.prototype.getInitialData = function() {
-  var data = [];
-  for (var i = 0; i < this.getLength(); i++) {
-    data.push(1);
-  };
-  return data;
+  // fill array with 0
+  return Array.apply(null, Array(this.getLength())).map(Number.prototype.valueOf, 0);
 }
 
 /*
