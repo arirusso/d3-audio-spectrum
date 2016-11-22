@@ -74,23 +74,33 @@ SA.Audio.Source.Device.prototype._streamLoadedCallback = function(stream, callba
 SA.Audio.Source.Device.prototype._sourcesLoadedCallback = function(sourceInfos, callback) {
   for (var i = 0; i != sourceInfos.length; ++i) {
     var sourceInfo = sourceInfos[i];
+    // return the first audio input
     if (sourceInfo.kind === "audio") {
       return this._initializeSource(sourceInfo, callback);
     }
   }
 }
 
+/*
+  Get the browser getUserMedia resource
+*/
 SA.Audio.Source.Device._getUserMedia = function() {
   return navigator.getUserMedia || navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia || navigator.msGetUserMedia;
 }
 
+/*
+  Ensure that the browser getUserMedia resource is initialized
+*/
 SA.Audio.Source.Device._ensureUserMediaIsInitialized = function() {
   if (navigator.getUserMedia == null) {
     navigator.getUserMedia = SA.Audio.Source.Device._getUserMedia();
   }
 }
 
+/*
+  Get the arguments needed to initialize the audio device via getUserMedia
+*/
 SA.Audio.Source.Device._getSystemArgs = function(sourceInfo) {
   return {
     audio: {
