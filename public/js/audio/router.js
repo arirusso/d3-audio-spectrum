@@ -3,6 +3,7 @@
 */
 SA.Audio.Router = function(sampleRate) {
   this._gain;
+  
   this.context;
   this.source;
 

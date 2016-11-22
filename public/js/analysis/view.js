@@ -1,4 +1,11 @@
 SA.Analysis.View = function(model, selector) {
+  this._amplitude;
+  this._chart;
+  this._color;
+  this._elementWidth;
+  this._x;
+  this._y;
+
   this._model = model;
   this._selector = selector;
   this._height = 500;
@@ -96,7 +103,7 @@ SA.Analysis.View.prototype._initializeChart = function() {
 SA.Analysis.View.prototype._enqueueNextUpdate = function() {
   var view = this;
   timeout = setTimeout(function() {
-    view.update()
+    view.update();
   }, 50);
   return timeout;
 }
