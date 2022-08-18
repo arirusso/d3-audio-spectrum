@@ -8,6 +8,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   puma (~> 5.6, >= 5.6.4)
